@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenithGen – ZenRoast</title>
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="zenroast.css" />
+</head>
+<body>
+  <!-- Floating Elements Background -->
+  <div class="floating-elements">
+    <div class="floating-circle floating-1"></div>
+    <div class="floating-circle floating-2"></div>
+    <div class="floating-circle floating-3"></div>
+    <div class="floating-circle floating-4"></div>
+    <div class="floating-circle floating-5"></div>
+    <div class="floating-circle floating-6"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <i data-lucide="sparkles" class="sparkle-icon"></i>
+        ZenRoast
+      </div>
+      <div class="navbar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+        <a href="diary.html" class="nav-item">
+          <i data-lucide="book-open"></i>
+          Diary
+        </a>
+        <a href="habit_tracker.html" class="nav-item">
+          <i data-lucide="target"></i>
+          Habits
+        </a>
+        <a href="zenarena.html" class="nav-item">
+          <i data-lucide="zap"></i>
+          Arena
+        </a>
+        <a href="zencalendar.html" class="nav-item">
+          <i data-lucide="calendar"></i>
+          Calendar
+        </a>
+        <a href="zenlytics.html" class="nav-item">
+          <i data-lucide="bar-chart-3"></i>
+          Analytics
+        </a>
+        <button class="nav-item logout-btn" onclick="logoutUser()">
+          <i data-lucide="log-out"></i>
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Dashboard Card -->
+    <div class="dashboard-card">
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1>🧘 ZenRoast</h1>
+          <p>Stay focused. Or prepare to be roasted 😏</p>
+          <div class="focus-streak">
+            <i data-lucide="flame"></i>
+            <span id="focus-streak">0 day streak</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="dashboard-content">
+        <!-- Stats Cards -->
+        <div class="content-card stats-card">
+          <div class="card-header">
+            <i data-lucide="clock"></i>
+            <h3>Time Away</h3>
+          </div>
+          <div class="stat-value">
+            <span id="away-time">0</span> secs
+          </div>
+          <div class="stat-progress">
+            <div class="progress">
+              <div class="progress-bar bg-info" id="time-progress" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-card stats-card distraction-card">
+          <div class="card-header">
+            <i data-lucide="alert-triangle"></i>
+            <h3>Distractions</h3>
+          </div>
+          <div class="stat-value">
+            <span id="distractions">0</span>
+          </div>
+          <div class="stat-subtitle">
+            <span id="distraction-rate">0%</span> distraction rate
+          </div>
+        </div>
+
+        <!-- Focus Score Card -->
+        <div class="content-card focus-score-card">
+          <div class="card-header">
+            <i data-lucide="target"></i>
+            <h3>Focus Score</h3>
+          </div>
+          <div class="stat-value focus-score">
+            <span id="focus-score">100</span>%
+          </div>
+          <div class="score-ring">
+            <svg class="score-circle" width="80" height="80">
+              <circle cx="40" cy="40" r="35" stroke="#e5e7eb" stroke-width="6" fill="none"/>
+              <circle cx="40" cy="40" r="35" stroke="#7c3aed" stroke-width="6" 
+                      fill="none" stroke-dasharray="220" stroke-dashoffset="0" id="score-circle"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Sarcasm Box -->
+        <div class="content-card sarcasm-card d-none" id="sarcasm-box">
+          <div class="card-header">
+            <i data-lucide="message-circle"></i>
+            <h3>AI Roast</h3>
+          </div>
+          <div class="sarcasm-content" id="sarcasm-content"></div>
+          <button class="btn btn-sm btn-outline-warning mt-2" onclick="dismissRoast()">
+            <i data-lucide="x"></i>
+            Got it, AI overlord
+          </button>
+        </div>
+
+        <!-- Real-time Stats -->
+        <div class="content-card realtime-card">
+          <div class="card-header">
+            <i data-lucide="activity"></i>
+            <h3>Session Stats</h3>
+          </div>
+          <div class="realtime-stats">
+            <div class="stat-item">
+              <i data-lucide="timer"></i>
+              <div>
+                <span class="stat-label">Session Time</span>
+                <span class="stat-number" id="session-time">0m</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <i data-lucide="eye"></i>
+              <div>
+                <span class="stat-label">Tab Switches</span>
+                <span class="stat-number" id="tab-switches">0</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <i data-lucide="clock"></i>
+              <div>
+                <span class="stat-label">Avg Away Time</span>
+                <span class="stat-number" id="avg-away">0s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Productivity Tips -->
+        <div class="content-card tips-card">
+          <div class="card-header">
+            <i data-lucide="lightbulb"></i>
+            <h3>Productivity Tip</h3>
+          </div>
+          <div class="tip-content" id="daily-tip">
+            <p>💡 Try the Pomodoro Technique: 25 minutes focused work, 5 minute break!</p>
+          </div>
+        </div>
+
+        <!-- Thoughts Section -->
+        <div class="content-card thoughts-card">
+          <div class="card-header">
+            <i data-lucide="edit-3"></i>
+            <h3>Log Your Thoughts</h3>
+          </div>
+          <div class="thoughts-input">
+            <textarea class="form-control" id="thoughts" placeholder="What distracted you? Confess here..." rows="3"></textarea>
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn btn-primary flex-1" onclick="saveThought()">
+                <i data-lucide="save"></i>
+                Save Thought
+              </button>
+              <button class="btn btn-outline-secondary" onclick="clearThoughts()">
+                <i data-lucide="trash-2"></i>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Past Entries -->
+        <div class="content-card logs-card">
+          <div class="card-header">
+            <i data-lucide="scroll-text"></i>
+            <h3>Past Entries</h3>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-outline-primary" onclick="exportLogs()">
+                <i data-lucide="download"></i>
+                Export
+              </button>
+            </div>
+          </div>
+          <div class="logs-container">
+            <ul class="list-group" id="log-list">
+              <li class="list-group-item text-muted">No entries yet...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="zendata.js"></script>
+  <script src="zenroast.js"></script>
+  <script>
+    // Check authentication
+    checkAuth();
+    
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

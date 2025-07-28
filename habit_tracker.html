@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenithGen – Habit Tracker</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="habit_tracker.css" />
+</head>
+<body>
+  <!-- Floating Elements Background -->
+  <div class="floating-elements">
+    <div class="floating-circle floating-1"></div>
+    <div class="floating-circle floating-2"></div>
+    <div class="floating-circle floating-3"></div>
+    <div class="floating-circle floating-4"></div>
+    <div class="floating-circle floating-5"></div>
+    <div class="floating-circle floating-6"></div>
+  </div>
+
+  <div class="main-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <i data-lucide="target" class="sparkle-icon"></i>
+        Habit Tracker
+      </div>
+      <div class="navbar-nav">
+        <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="zenroast.html" class="nav-item"><i data-lucide="target"></i>ZenRoast</a>
+        <a href="diary.html" class="nav-item"><i data-lucide="book-open"></i>Diary</a>
+        <a href="zenarena.html" class="nav-item"><i data-lucide="zap"></i>Arena</a>
+        <a href="zencalendar.html" class="nav-item"><i data-lucide="calendar"></i>Calendar</a>
+        <a href="zenlytics.html" class="nav-item"><i data-lucide="bar-chart-3"></i>Analytics</a>
+        <button class="nav-item logout-btn" onclick="logoutUser()"><i data-lucide="log-out"></i>Logout</button>
+      </div>
+    </nav>
+
+    <div class="dashboard-card">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1><i data-lucide="target"></i> Habit Tracker</h1>
+          <p>Track your habits. Build your streak. Stay consistent!</p>
+        </div>
+      </div>
+      <div class="dashboard-content">
+        <!-- Stats Cards -->
+        <div class="content-card stats-card">
+          <div class="card-header">
+            <i data-lucide="list"></i>
+            <h3>Total Habits</h3>
+          </div>
+          <div class="stat-value" id="total-habits">0</div>
+        </div>
+        <div class="content-card stats-card">
+          <div class="card-header">
+            <i data-lucide="flame"></i>
+            <h3>Active Streaks</h3>
+          </div>
+          <div class="stat-value" id="active-streaks">0</div>
+        </div>
+        <div class="content-card stats-card">
+          <div class="card-header">
+            <i data-lucide="medal"></i>
+            <h3>Longest Streak</h3>
+          </div>
+          <div class="stat-value" id="longest-streak">0</div>
+        </div>
+        <div class="content-card stats-card">
+          <div class="card-header">
+            <i data-lucide="percent"></i>
+            <h3>Today's Progress</h3>
+          </div>
+          <div class="stat-value" id="completion-rate">0%</div>
+        </div>
+
+        <!-- Add Habit Section -->
+        <div class="content-card">
+          <div class="card-header">
+            <i data-lucide="plus-circle"></i>
+            <h3>Add New Habit</h3>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" id="habit-name" class="form-control" placeholder="Enter your new habit (e.g., Drink 8 glasses of water)">
+            <button class="btn btn-primary" onclick="addHabit()"><i data-lucide="plus"></i> Add Habit</button>
+          </div>
+          <div class="quick-add-section">
+            <h4 class="quick-add-title"><i data-lucide="zap"></i> Quick Add Popular Habits</h4>
+            <div class="quick-add-grid">
+              <button class="btn btn-outline-secondary" onclick="quickAddHabit('💧 Drink 8 glasses of water')">💧 Drink Water</button>
+              <button class="btn btn-outline-secondary" onclick="quickAddHabit('🏃‍♀️ Exercise for 30 minutes')">🏃‍♀️ Exercise</button>
+              <button class="btn btn-outline-secondary" onclick="quickAddHabit('📖 Read for 20 minutes')">📖 Reading</button>
+              <button class="btn btn-outline-secondary" onclick="quickAddHabit('🧘‍♂️ Meditate for 10 minutes')">🧘‍♂️ Meditation</button>
+              <button class="btn btn-outline-secondary" onclick="quickAddHabit('🌅 Wake up at 6 AM')">🌅 Early Rise</button>
+              <button class="btn btn-outline-secondary" onclick="quickAddHabit('💤 Sleep 8 hours')">💤 Good Sleep</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Habits List Section -->
+        <div class="content-card">
+          <div class="card-header">
+            <i data-lucide="list-checks"></i>
+            <h3>Your Habits</h3>
+          </div>
+          <div id="habit-list"></div>
+          <div id="empty-state" class="empty-state" style="display: none;">
+            <i data-lucide="leaf"></i>
+            <h4>No habits yet!</h4>
+            <p>Start building better habits today. Add your first habit above!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement Modal -->
+  
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;"></div>
+  <script src="auth.js"></script>
+  <script src="zendata.js"></script>
+  <script src="habit_tracker.js"></script>
+  <script>
+    // Check authentication
+    checkAuth();
+    
+    lucide.createIcons();
+  </script>
+</body>
+</html>

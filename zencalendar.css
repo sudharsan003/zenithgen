@@ -1,0 +1,1494 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #ef4444 100%);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.main-container {
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+/* Floating Elements */
+.floating-elements {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.floating-1 {
+  top: 10%;
+  left: 5%;
+  width: 4rem;
+  height: 4rem;
+  background-color: #fde047;
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-2 {
+  top: 20%;
+  right: 10%;
+  width: 3rem;
+  height: 3rem;
+  background-color: #93c5fd;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.floating-3 {
+  bottom: 30%;
+  left: 15%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #86efac;
+  animation: float 7s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.floating-4 {
+  bottom: 20%;
+  right: 20%;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: #f9a8d4;
+  animation: float 9s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.floating-5 {
+  top: 60%;
+  left: 8%;
+  width: 2rem;
+  height: 2rem;
+  background-color: #a78bfa;
+  animation: float 5s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+.floating-6 {
+  top: 40%;
+  right: 5%;
+  width: 4.5rem;
+  height: 4.5rem;
+  background-color: #fbbf24;
+  animation: float 10s ease-in-out infinite reverse;
+  animation-delay: 4s;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  z-index: 100;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+}
+
+.sparkle-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.nav-item i {
+  width: 1rem;
+  height: 1rem;
+}
+
+.logout-btn {
+  background: rgba(239, 68, 68, 0.8);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 1);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+/* Dashboard Card */
+.dashboard-card {
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 3rem;
+}
+
+.dashboard-header {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.welcome-section h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-section p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+/* Dashboard Content Grid */
+.dashboard-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+/* 3-Column Layout for Calendar, Task Board, and Timeline */
+/* RESTORED: This layout was accidentally removed and has been restored */
+.zc-calendar-section,
+.zc-task-board-card,
+.zc-timeline-card {
+  grid-column: span 1;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure uniform sizing for the three main cards */
+.zc-calendar-section .content-card,
+.zc-task-board-card,
+.zc-timeline-card {
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.content-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.card-header i {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #7c3aed;
+}
+
+.card-header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+  flex: 1;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.empty-text {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Toast Container */
+.toast {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 20rem;
+}
+
+.toast.success {
+  border-left: 4px solid #22c55e;
+}
+
+.toast.error {
+  border-left: 4px solid #ef4444;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-20px) rotate(270deg);
+  }
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+@media (max-width: 576px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .navbar-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .dashboard-card {
+    margin: 1rem;
+  }
+  .dashboard-content {
+    padding: 1rem;
+  }
+}
+
+/* Date-wise To-Do Grid Styles */
+.todo-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.todo-day {
+  background: rgba(255,255,255,0.85);
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.08);
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  min-height: 140px;
+}
+.todo-day:hover {
+  box-shadow: 0 8px 32px rgba(168,85,247,0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+.todo-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #7c3aed;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.todo-add-btn {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.12);
+}
+.todo-add-btn:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+  transform: scale(1.1);
+}
+.todo-list {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.todo-item {
+  background: rgba(236,72,153,0.08);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #374151;
+  transition: background 0.2s;
+}
+.todo-item:hover {
+  background: rgba(124,58,237,0.10);
+}
+.todo-edit-btn, .todo-delete-btn {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  font-size: 1rem;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  transition: background 0.2s, color 0.2s;
+  padding: 0.2rem 0.4rem;
+}
+.todo-edit-btn:hover {
+  background: rgba(124,58,237,0.08);
+  color: #a855f7;
+}
+.todo-delete-btn {
+  color: #ef4444;
+}
+.todo-delete-btn:hover {
+  background: rgba(239,68,68,0.08);
+  color: #b91c1c;
+}
+/* Modal for To-Do Editing */
+.todo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30,41,59,0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.todo-modal {
+  background: rgba(255,255,255,0.98);
+  border-radius: 1rem;
+  box-shadow: 0 16px 48px rgba(124,58,237,0.18);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  min-width: 300px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: popIn 0.25s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.todo-modal input {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid #a855f7;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.todo-modal .modal-btn-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+.todo-modal .modal-btn {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.todo-modal .modal-btn:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+}
+@media (max-width: 768px) {
+  .todo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  .todo-day {
+    min-height: 120px;
+    padding: 0.7rem 0.3rem 0.3rem 0.3rem;
+  }
+}
+
+/* --- ZENCALENDAR CUSTOM FEATURES (zc-*) --- */
+
+/* 1. Animated Monthly Calendar Grid */
+.zc-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+  min-height: 320px;
+  background: rgba(124,58,237,0.04);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 12px rgba(124,58,237,0.07);
+  position: relative;
+}
+.zc-calendar-day {
+  background: rgba(255,255,255,0.85);
+  border-radius: 0.75rem;
+  min-height: 60px;
+  box-shadow: 0 2px 8px rgba(168,85,247,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem 0.5rem 0.5rem 0.7rem;
+  position: relative;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+  overflow: visible;
+}
+.zc-calendar-day:hover {
+  background: linear-gradient(90deg, #f3e8ff 60%, #f9a8d4 100%);
+  box-shadow: 0 6px 24px rgba(168,85,247,0.18);
+  transform: scale(1.04) translateY(-2px);
+  z-index: 2;
+}
+.zc-calendar-day.animate-in {
+  animation: zc-fadein 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes zc-fadein {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.zc-task-pill {
+  display: inline-block;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  color: white;
+  font-size: 0.8rem;
+  border-radius: 1rem;
+  padding: 0.15rem 0.7rem;
+  margin: 0.1rem 0.1rem 0 0;
+  box-shadow: 0 1px 4px rgba(124,58,237,0.10);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.zc-task-pill.completed {
+  background: linear-gradient(90deg, #22c55e, #a3e635);
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+.zc-task-pill:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+  box-shadow: 0 2px 12px rgba(236,72,153,0.18);
+}
+
+/* 2. Drag & Drop Task Board */
+.zc-task-board {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  min-height: 60px;
+  margin-bottom: 0.5rem;
+}
+.zc-task-board-task {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: white;
+  border-radius: 1rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.10);
+  cursor: grab;
+  transition: box-shadow 0.2s, transform 0.2s;
+  user-select: none;
+  position: relative;
+}
+.zc-task-board-task:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 2px rgba(124,58,237,0.08);
+}
+.zc-task-board-hint {
+  font-size: 0.9rem;
+  color: #a78bfa;
+  margin-top: 0.2rem;
+  opacity: 0.8;
+}
+.zc-calendar-day.zc-drop-hover {
+  outline: 2.5px dashed #a855f7;
+  background: #f3e8ff;
+  box-shadow: 0 0 0 4px #a855f733;
+}
+
+/* 3. Time-Blocking Timeline */
+.zc-timeline {
+  width: 100%;
+  height: 32px;
+  background: rgba(124,58,237,0.08);
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.07);
+}
+.zc-timeline-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  border-radius: 1rem 0 0 1rem;
+  transition: width 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+  box-shadow: 0 2px 8px rgba(236,72,153,0.10);
+}
+
+
+
+.zc-timeline-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #7c3aed;
+  font-weight: 600;
+  font-size: 1rem;
+  text-shadow: 0 1px 4px #fff8;
+}
+
+/* 4. Streak Flame Widget */
+.zc-streak-flame-widget {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-start;
+  padding: 1rem 0;
+}
+.zc-flame {
+  width: 48px;
+  height: 48px;
+  background: radial-gradient(circle at 60% 30%, #fbbf24 60%, #f59e0b 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 24px 8px #fbbf2466, 0 0 0 2px #f59e0b44;
+  position: relative;
+  animation: zc-flame-glow 1.2s infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes zc-flame-glow {
+  0% { box-shadow: 0 0 24px 8px #fbbf2466, 0 0 0 2px #f59e0b44; }
+  100% { box-shadow: 0 0 36px 16px #fbbf24cc, 0 0 0 4px #f59e0b88; }
+}
+.zc-flame svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 8px #fbbf24cc);
+}
+.zc-streak-count {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f59e0b;
+  text-shadow: 0 1px 8px #fbbf24cc;
+}
+.zc-streak-label {
+  font-size: 1rem;
+  color: #7c3aed;
+  font-weight: 600;
+}
+.zc-flame-pop {
+  animation: zc-flame-pop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes zc-flame-pop {
+  0% { transform: scale(1.2); filter: brightness(1.5); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* 5. Productivity / Mood Heatmap */
+.zc-heatmap {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 2px;
+  margin: 1rem 0;
+  min-height: 60px;
+  background: rgba(124,58,237,0.04);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.07);
+}
+.zc-heatmap-cell {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 0.3rem;
+  background: #e0e7ff;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px #a78bfa22;
+  cursor: pointer;
+  position: relative;
+}
+.zc-heatmap-cell[data-level="0"] { background: #e0e7ff; }
+.zc-heatmap-cell[data-level="1"] { background: #a5b4fc; }
+.zc-heatmap-cell[data-level="2"] { background: #818cf8; }
+.zc-heatmap-cell[data-level="3"] { background: #6366f1; }
+.zc-heatmap-cell[data-level="4"] { background: #f472b6; }
+.zc-heatmap-cell[data-level="5"] { background: #f59e42; }
+.zc-heatmap-cell:hover {
+  box-shadow: 0 0 12px 4px #a855f7cc;
+  z-index: 2;
+}
+.zc-heatmap-tooltip {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #7c3aed;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 8px #a78bfa33;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.zc-heatmap-cell:hover .zc-heatmap-tooltip {
+  opacity: 1;
+}
+
+/* 6. Micro-interaction Ripple & Confetti */
+.zc-ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: zc-ripple 0.6s linear;
+  background: rgba(168,85,247,0.25);
+  pointer-events: none;
+  z-index: 10;
+}
+@keyframes zc-ripple {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+.zc-confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2000;
+  opacity: 0.85;
+  animation: zc-confetti-fall 1.5s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+}
+@keyframes zc-confetti-fall {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-180px) scale(0.7); opacity: 0; }
+}
+
+/* Responsive Tweaks for zc-* features */
+@media (max-width: 900px) {
+  .zc-calendar-grid { grid-template-columns: repeat(4, 1fr); }
+  .zc-heatmap { grid-template-columns: repeat(7, 1fr); }
+}
+@media (max-width: 600px) {
+  .zc-calendar-grid { grid-template-columns: repeat(2, 1fr); }
+  .zc-heatmap { grid-template-columns: repeat(4, 1fr); }
+  .zc-streak-flame-widget { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}
+
+/* Responsive behavior for 3-column layout */
+@media (max-width: 1200px) {
+  .zc-calendar-section,
+  .zc-task-board-card,
+  .zc-timeline-card {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .zc-calendar-section,
+  .zc-task-board-card,
+  .zc-timeline-card {
+    grid-column: span 1;
+  }
+  
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+}
+/* --- END ZENCALENDAR CUSTOM FEATURES --- */
+
+/* --- ZENCALENDAR ENHANCEMENTS & FIXES (zc-*) --- */
+
+
+
+.zc-calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.zc-nav-btn {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.10);
+  display: flex;
+  align-items: center;
+}
+.zc-nav-btn:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+  transform: scale(1.08);
+}
+.zc-current-month {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #a855f7;
+  letter-spacing: 0.5px;
+}
+
+/* Calendar grid always 7 columns, fill empty cells at end */
+.zc-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+  min-height: 320px;
+  background: rgba(124,58,237,0.04);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 12px rgba(124,58,237,0.07);
+  position: relative;
+  overflow-x: auto;
+}
+.zc-calendar-day {
+  background: rgba(255,255,255,0.85);
+  border-radius: 0.75rem;
+  min-height: 60px;
+  box-shadow: 0 2px 8px rgba(168,85,247,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem 0.5rem 0.5rem 0.7rem;
+  position: relative;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+  overflow: visible;
+}
+.zc-calendar-day:hover {
+  background: linear-gradient(90deg, #f3e8ff 60%, #f9a8d4 100%);
+  box-shadow: 0 6px 24px rgba(168,85,247,0.18);
+  transform: scale(1.07) translateY(-2px);
+  z-index: 2;
+}
+.zc-calendar-header {
+  background: none !important;
+  font-weight: bold;
+  color: #a855f7;
+  cursor: default;
+  box-shadow: none;
+  min-height: 32px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+/* Selected date row above todo grid */
+.zc-selected-date-row {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+.zc-selected-date-display {
+  font-size: 1.1rem;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+/* To-Do Card Enhancements */
+.zc-todo-card {
+  border: 2px solid #a855f7;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.08);
+}
+
+/* Timeline Enhancements */
+.zc-timeline-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.zc-timeline-input {
+  border: 1.5px solid #a855f7;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+  height: 2.5rem;
+  box-sizing: border-box;
+}
+.zc-timeline-input:focus {
+  border-color: #ec4899;
+}
+.zc-timeline-add-btn {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 2.5rem;
+  box-sizing: border-box;
+}
+.zc-timeline-add-btn:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+  transform: scale(1.08);
+}
+.zc-timeline-slots {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+.zc-timeline-slot {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  color: white;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.10);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+.zc-timeline-slot:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+  transform: scale(1.07);
+  box-shadow: 0 4px 16px #a855f7aa;
+}
+.zc-timeline-slot-remove {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  margin-left: 0.2rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  transition: background 0.2s, color 0.2s;
+  padding: 0.1rem 0.4rem;
+}
+.zc-timeline-slot-remove:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* Quote Card */
+.zc-quote-card {
+  background: linear-gradient(90deg, #f3e8ff 60%, #f9a8d4 100%);
+  border: 2px solid #a855f7;
+  box-shadow: 0 4px 16px rgba(236,72,153,0.08);
+}
+.zc-quote-content {
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  text-align: center;
+}
+.zc-daily-quote {
+  font-size: 1.1rem;
+  color: #7c3aed;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+.zc-quote-author {
+  font-size: 1rem;
+  color: #ec4899;
+  font-weight: 500;
+}
+.zc-quote-refresh-btn {
+  background: none;
+  border: none;
+  color: #a855f7;
+  font-size: 1.1rem;
+  margin-left: auto;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  transition: background 0.2s, color 0.2s;
+  padding: 0.2rem 0.4rem;
+}
+.zc-quote-refresh-btn:hover {
+  background: #a855f7;
+  color: #fff;
+}
+
+/* Weekly Goals Card */
+.zc-weekly-goals-card {
+  background: linear-gradient(90deg, #e0e7ff 60%, #a5b4fc 100%);
+  border: 2px solid #6366f1;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.08);
+}
+.zc-weekly-goals-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+}
+.zc-weekly-goals-list li {
+  background: #fff;
+  border-radius: 0.7rem;
+  margin-bottom: 0.4rem;
+  padding: 0.5rem 1rem;
+  color: #374151;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px #a5b4fc22;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.zc-weekly-goals-list li:hover {
+  box-shadow: 0 4px 16px #6366f1aa;
+  transform: scale(1.04);
+}
+.zc-weekly-goal-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  transition: background 0.2s, color 0.2s;
+  padding: 0.1rem 0.4rem;
+}
+.zc-weekly-goal-remove:hover {
+  background: #ef4444;
+  color: #fff;
+}
+.zc-weekly-goals-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.zc-weekly-goal-input {
+  border: 1.5px solid #6366f1;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  outline: none;
+  flex: 1;
+  transition: border 0.2s;
+}
+.zc-weekly-goal-input:focus {
+  border-color: #a855f7;
+}
+.zc-weekly-goal-add-btn {
+  background: linear-gradient(90deg, #6366f1, #a5b4fc);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+}
+.zc-weekly-goal-add-btn:hover {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  transform: scale(1.08);
+}
+
+/* Heatmap dynamic color intensity (override) */
+.zc-heatmap-cell[data-level="0"] { background: #e0e7ff; }
+.zc-heatmap-cell[data-level="1"] { background: #a5b4fc; }
+.zc-heatmap-cell[data-level="2"] { background: #818cf8; }
+.zc-heatmap-cell[data-level="3"] { background: #6366f1; }
+.zc-heatmap-cell[data-level="4"] { background: #f472b6; }
+.zc-heatmap-cell[data-level="5"] { background: #f59e42; }
+.zc-heatmap-cell {
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.zc-heatmap-cell:hover {
+  box-shadow: 0 0 12px 4px #a855f7cc;
+  z-index: 2;
+  transform: scale(1.12);
+}
+
+/* Responsive Tweaks for zc-* features */
+@media (max-width: 900px) {
+  .zc-calendar-grid { grid-template-columns: repeat(4, 1fr); }
+  .zc-heatmap { grid-template-columns: repeat(7, 1fr); }
+}
+@media (max-width: 600px) {
+  .zc-calendar-grid { grid-template-columns: repeat(2, 1fr); }
+  .zc-heatmap { grid-template-columns: repeat(4, 1fr); }
+  .zc-streak-flame-widget { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+
+  .zc-calendar-nav { gap: 0.5rem; }
+  .zc-timeline-form { flex-direction: column; gap: 0.3rem; }
+  .zc-timeline-slots { flex-direction: column; }
+}
+/* --- END ZENCALENDAR ENHANCEMENTS & FIXES --- */
+
+/* --- ZENCALENDAR LAYOUT & INTERACTIVITY FIXES (zc-*) --- */
+
+.zc-calendar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+.zc-calendar-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  background: rgba(255,255,255,0.12);
+  border-radius: 0.7rem;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.07);
+}
+.zc-current-month {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #a855f7;
+  letter-spacing: 0.5px;
+  text-align: center;
+  min-width: 140px;
+}
+
+.zc-calendar-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.08);
+}
+.zc-calendar-grid {
+  width: 100%;
+  min-width: 0;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  /* grid styles remain as before */
+}
+
+/* Calendar day hover/scale effect */
+.zc-calendar-day {
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+}
+.zc-calendar-day:hover {
+  transform: scale(1.08) translateY(-2px);
+  z-index: 2;
+}
+
+/* Task Board fixes */
+.zc-task-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 60px;
+  padding-bottom: 0.5rem;
+}
+.zc-task-board-task,
+.zc-task-item {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: white;
+  border-radius: 1rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.10);
+  cursor: grab;
+  user-select: none;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
+  margin-bottom: 0.2rem;
+}
+.zc-task-board-task:hover,
+.zc-task-item:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px #a855f7aa;
+}
+.zc-task-item:active {
+  cursor: grabbing;
+}
+
+/* Streak Widget always shows glowing flame */
+.zc-streak-flame-card {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.zc-streak-flame-widget {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+.zc-flame {
+  width: 48px;
+  height: 48px;
+  background: radial-gradient(circle at 60% 30%, #fbbf24 60%, #f59e0b 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 24px 8px #fbbf2466, 0 0 0 2px #f59e0b44;
+  position: relative;
+  animation: zc-flame-glow 1.2s infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes zc-flame-glow {
+  0% { box-shadow: 0 0 24px 8px #fbbf2466, 0 0 0 2px #f59e0b44; }
+  100% { box-shadow: 0 0 36px 16px #fbbf24cc, 0 0 0 4px #f59e0b88; }
+}
+.zc-flame svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 8px #fbbf24cc);
+}
+.zc-streak-count {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f59e0b;
+  text-shadow: 0 1px 8px #fbbf24cc;
+}
+.zc-streak-label {
+  font-size: 1rem;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+/* Heatmap dummy data/hover */
+.zc-heatmap {
+  min-width: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.zc-heatmap-cell {
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.zc-heatmap-cell:hover {
+  box-shadow: 0 0 12px 4px #a855f7cc;
+  z-index: 2;
+  transform: scale(1.12);
+}
+
+/* Progress Tracker Widget */
+.zc-progress-tracker-card {
+  background: linear-gradient(90deg, #e0e7ff 60%, #a5b4fc 100%);
+  border: 2px solid #6366f1;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  margin-top: 1rem;
+}
+.zc-progress-tracker-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.zc-progress-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 2px 8px #a5b4fc33;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+.zc-progress-label {
+  font-size: 1.1rem;
+  color: #6366f1;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 900px) {
+  .zc-calendar-card, .zc-calendar-grid, .zc-heatmap, .zc-progress-tracker-card {
+    max-width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .zc-calendar-nav-row { gap: 0.5rem; }
+  .zc-calendar-card, .zc-calendar-grid, .zc-heatmap, .zc-progress-tracker-card {
+    max-width: 100vw;
+    min-width: 0;
+  }
+  .zc-progress-circle { width: 70px; height: 70px; }
+}
+
+/* Completion Toggle Styles */
+.zc-todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.zc-todo-item.completed {
+  background: #f0f9ff;
+  border-left: 4px solid #22c55e;
+}
+
+.zc-todo-item.completed span {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+
+.zc-todo-toggle {
+  background: none;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.zc-todo-toggle:hover {
+  border-color: #a855f7;
+  color: #a855f7;
+}
+
+.zc-todo-item.completed .zc-todo-toggle {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+/* Timeline Slot Completion Styles */
+.zc-timeline-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.zc-timeline-slot.completed {
+  background: #f0f9ff;
+  border-left: 4px solid #22c55e;
+}
+
+.zc-timeline-slot.completed span {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+
+.zc-timeline-toggle {
+  background: none;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: #6b7280;
+  margin-right: 0.5rem;
+}
+
+.zc-timeline-toggle:hover {
+  border-color: #a855f7;
+  color: #a855f7;
+}
+
+.zc-timeline-slot.completed .zc-timeline-toggle {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+/* Weekly Goals Completion Styles */
+.zc-weekly-goals-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.zc-weekly-goals-list li.completed {
+  background: #f0f9ff;
+  border-left: 4px solid #22c55e;
+}
+
+.zc-weekly-goals-list li.completed span {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+
+.zc-weekly-goal-toggle {
+  background: none;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: #6b7280;
+  margin-right: 0.5rem;
+}
+
+.zc-weekly-goal-toggle:hover {
+  border-color: #a855f7;
+  color: #a855f7;
+}
+
+.zc-weekly-goals-list li.completed .zc-weekly-goal-toggle {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+/* --- END ZENCALENDAR LAYOUT & INTERACTIVITY FIXES --- */

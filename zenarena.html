@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenArena - Distraction Arena | ZenithGen</title>
+    <link href="https://cdn.jsdelivr.net/npm/lucide@latest/font/lucide.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="zenarena.css">
+</head>
+<body>
+    <!-- Floating Elements Background (match ZenRoast/Dashboard) -->
+    <div class="floating-elements">
+        <div class="floating-circle floating-1"></div>
+        <div class="floating-circle floating-2"></div>
+        <div class="floating-circle floating-3"></div>
+        <div class="floating-circle floating-4"></div>
+        <div class="floating-circle floating-5"></div>
+        <div class="floating-circle floating-6"></div>
+    </div>
+
+    <!-- Navbar (match ZenRoast/Dashboard) -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i data-lucide="zap" class="sparkle-icon"></i>
+            ZenArena
+        </div>
+        <div class="navbar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                Dashboard
+            </a>
+            <a href="zenroast.html" class="nav-item">
+                <i data-lucide="target"></i>
+                ZenRoast
+            </a>
+            <a href="diary.html" class="nav-item">
+                <i data-lucide="book-open"></i>
+                Diary
+            </a>
+            <a href="habit_tracker.html" class="nav-item">
+                <i data-lucide="check-circle"></i>
+                Habits
+            </a>
+            <a href="zencalendar.html" class="nav-item">
+                <i data-lucide="calendar"></i>
+                Calendar
+            </a>
+            <a href="zenlytics.html" class="nav-item">
+                <i data-lucide="bar-chart-3"></i>
+                Analytics
+            </a>
+            <button class="nav-item logout-btn" onclick="logoutUser()">
+                <i data-lucide="log-out"></i>
+                Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container (glassmorphism, match ZenRoast/Dashboard) -->
+    <div class="main-container">
+        <div class="arena-card">
+            <!-- Header -->
+            <div class="arena-header">
+                <div class="header-content">
+                    <h1>🎯 Distraction Arena</h1>
+                    <p>Track what's stealing your focus and transform distractions into awareness</p>
+                </div>
+                <div class="focus-streak">
+                    <i data-lucide="flame"></i>
+                    <span id="focusStreak">0 day focus streak</span>
+                </div>
+            </div>
+
+            <!-- Arena Content -->
+            <div class="arena-content">
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalTimeWasted">0</div>
+                            <div class="stat-label">Minutes Lost Today</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="zap-off"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalDistractions">0</div>
+                            <div class="stat-label">Distractions Today</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="focusScore">100</div>
+                            <div class="stat-label">Focus Score</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i data-lucide="target"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="topTrigger">None</div>
+                            <div class="stat-label">Top Trigger</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log Distraction Form -->
+                <div class="content-card log-distraction-card">
+                    <div class="card-header">
+                        <h3><i data-lucide="plus-circle"></i> Log New Distraction</h3>
+                    </div>
+                    <div class="distraction-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="distractionDesc">What distracted you?</label>
+                                <input type="text" id="distractionDesc" placeholder="e.g., Checked Instagram">
+                            </div>
+                            <div class="form-group">
+                                <label for="distractionType">Category</label>
+                                <select id="distractionType">
+                                    <option value="Social Media">📱 Social Media</option>
+                                    <option value="Gaming">🎮 Gaming</option>
+                                    <option value="Food">🍕 Food/Snacks</option>
+                                    <option value="Overthinking">🧠 Overthinking</option>
+                                    <option value="Phone">📞 Phone/Calls</option>
+                                    <option value="News">📰 News/Articles</option>
+                                    <option value="YouTube">📺 YouTube/Videos</option>
+                                    <option value="Shopping">🛒 Online Shopping</option>
+                                    <option value="Other">🔄 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="distractionDuration">Duration (minutes)</label>
+                                <input type="number" id="distractionDuration" placeholder="5" min="1" max="480">
+                            </div>
+                            <div class="form-group">
+                                <label for="distractionTrigger">What triggered it?</label>
+                                <input type="text" id="distractionTrigger" placeholder="e.g., Boredom, notification">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="distractionMood">Mood at the time</label>
+                                <select id="distractionMood">
+                                    <option value="Happy">😊 Happy</option>
+                                    <option value="Stressed">😰 Stressed</option>
+                                    <option value="Bored">😑 Bored</option>
+                                    <option value="Anxious">😟 Anxious</option>
+                                    <option value="Tired">😴 Tired</option>
+                                    <option value="Excited">🤩 Excited</option>
+                                    <option value="Neutral">😐 Neutral</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="distractionIntensity">Intensity (1-10)</label>
+                                <input type="range" id="distractionIntensity" min="1" max="10" value="5" class="intensity-slider">
+                                <span class="intensity-value">5</span>
+                            </div>
+                        </div>
+                        <button class="log-btn" onclick="logDistraction()">
+                            <i data-lucide="plus"></i>
+                            Log Distraction
+                        </button>
+                    </div>
+                    <div class="sarcasm-box" id="sarcasmBox"></div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="charts-grid">
+                    <div class="content-card chart-card">
+                        <div class="card-header">
+                            <h3><i data-lucide="pie-chart"></i> Distraction Categories</h3>
+                        </div>
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="content-card chart-card">
+                        <div class="card-header">
+                            <h3><i data-lucide="activity"></i> Daily Pattern</h3>
+                        </div>
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Distractions -->
+                <div class="content-card logs-card">
+                    <div class="card-header">
+                        <h3><i data-lucide="list"></i> Recent Distractions</h3>
+                        <div class="card-actions">
+                            <button class="action-btn" onclick="exportData()">
+                                <i data-lucide="download"></i>
+                                Export
+                            </button>
+                            <button class="action-btn danger" onclick="clearAllLogs()">
+                                <i data-lucide="trash-2"></i>
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="logs-container" id="logsContainer">
+                        <div class="empty-state">
+                            <i data-lucide="target"></i>
+                            <p>No distractions logged yet. Stay focused!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insights & Achievements -->
+                <div class="insights-grid">
+                    <div class="content-card insights-card">
+                        <div class="card-header">
+                            <h3><i data-lucide="lightbulb"></i> Smart Insights</h3>
+                        </div>
+                        <div class="insights-content" id="insightsContent">
+                            <div class="insight-item">
+                                <i data-lucide="brain"></i>
+                                <span>Start tracking to get personalized insights</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-card achievements-card">
+                        <div class="card-header">
+                            <h3><i data-lucide="trophy"></i> Focus Achievements</h3>
+                        </div>
+                        <div class="achievements-content" id="achievementsContent">
+                            <div class="achievement locked">
+                                <i data-lucide="target"></i>
+                                <div class="achievement-info">
+                                    <div class="achievement-name">Focus Novice</div>
+                                    <div class="achievement-desc">Log your first distraction</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Challenge -->
+                <div class="content-card challenge-card">
+                    <div class="card-header">
+                        <h3><i data-lucide="zap"></i> Today's Focus Challenge</h3>
+                    </div>
+                    <div class="challenge-content">
+                        <div class="challenge-info">
+                            <div class="challenge-title" id="challengeTitle">No Distraction Hour</div>
+                            <div class="challenge-desc" id="challengeDesc">Stay focused for 1 continuous hour without logging any distractions</div>
+                        </div>
+                        <div class="challenge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="challengeProgress"></div>
+                            </div>
+                            <div class="progress-text" id="challengeProgressText">0% Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Modals -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Distraction Data</h3>
+                <button class="modal-close" onclick="closeModal('exportModal')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeStats" checked>
+                        <span>Include statistics</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeCharts" checked>
+                        <span>Include chart data</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeInsights">
+                        <span>Include insights</span>
+                    </label>
+                </div>
+                <div class="export-format">
+                    <label for="exportFormat">Export format:</label>
+                    <select id="exportFormat">
+                        <option value="json">JSON</option>
+                        <option value="csv">CSV</option>
+                        <option value="txt">Text</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" onclick="closeModal('exportModal')">Cancel</button>
+                <button class="btn primary" onclick="performExport()">Export Data</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="auth.js"></script>
+    <script src="zendata.js"></script>
+    <script src="zenarena.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+        
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

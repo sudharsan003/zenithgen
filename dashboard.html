@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenithGen – Dashboard</title>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="dashboard.css" />
+
+</head>
+<body>
+  <div class="container">
+    <!-- Floating elements for visual appeal -->
+    <div class="floating-elements">
+      <div class="floating-circle floating-1"></div>
+      <div class="floating-circle floating-2"></div>
+      <div class="floating-circle floating-3"></div>
+      <div class="floating-circle floating-4"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <i data-lucide="sparkles" class="sparkle-icon"></i>
+        ZenithGen Dashboard
+      </div>
+      <div class="navbar-nav">
+        <a href="zenroast.html" class="nav-item">
+          <i data-lucide="target"></i>
+          ZenRoast
+        </a>
+        <a href="diary.html" class="nav-item">
+          <i data-lucide="book-open"></i>
+          Diary
+        </a>
+        <a href="habit_tracker.html" class="nav-item">
+          <i data-lucide="check-circle"></i>
+          Habits
+        </a>
+        <a href="zenarena.html" class="nav-item">
+          <i data-lucide="zap"></i>
+          Arena
+        </a>
+        <a href="zencalendar.html" class="nav-item">
+          <i data-lucide="calendar"></i>
+          Calendar
+        </a>
+        <a href="zenlytics.html" class="nav-item">
+          <i data-lucide="bar-chart"></i>
+          Analytics
+        </a>
+        <button class="nav-item logout-btn" onclick="logoutUser()">
+          <i data-lucide="log-out"></i>
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Dashboard Card -->
+    <div class="dashboard-card">
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1 id="welcomeMessage">Hi there! Welcome back ✨</h1>
+          <p id="welcomeSubtitle">Ready to conquer your goals today?</p>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="dashboard-content">
+        <!-- Quote Section -->
+        <div class="content-card quote-card">
+          <div class="card-header">
+            <i data-lucide="message-circle"></i>
+            <h3>Daily Motivation</h3>
+          </div>
+          <blockquote id="quoteText">Loading quote...</blockquote>
+          <footer id="quoteAuthor">ZenBot</footer>
+        </div>
+
+        <!-- Mood Chart -->
+        <div class="content-card chart-card">
+          <div class="card-header">
+            <i data-lucide="trending-up"></i>
+            <h3>Mood Snapshot</h3>
+          </div>
+          <canvas id="moodChart" height="200"></canvas>
+        </div>
+
+        <!-- Habit Progress -->
+        <div class="content-card habit-card">
+          <div class="card-header">
+            <i data-lucide="target"></i>
+            <h3>Habit Tracker</h3>
+          </div>
+          <div id="habit-progress">Loading habit stats...</div>
+        </div>
+
+        <!-- Distraction Summary -->
+        <div class="content-card distraction-card">
+          <div class="card-header">
+            <i data-lucide="shield"></i>
+            <h3>Focus Summary</h3>
+          </div>
+          <div id="distraction-summary">Awaiting data...</div>
+        </div>
+
+        <!-- To-Do for Today -->
+        <div class="content-card todo-card">
+          <div class="card-header">
+            <i data-lucide="check-square"></i>
+            <h3>Today's Tasks</h3>
+          </div>
+          <div id="todo-list" class="todo-container">
+            <div class="todo-item">Loading your ZenPlan...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Modal -->
+  <div class="welcome-modal" id="welcomeModal">
+    <div class="modal-overlay" onclick="closeWelcomeModal()"></div>
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeWelcomeModal()">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="modal-body">
+        <div class="welcome-sparkle">✨</div>
+        <h2 class="welcome-title">Welcome to ZenithGen!</h2>
+        <p class="welcome-subtitle">Where goals meet reality 🎯</p>
+        <p class="welcome-text">
+          You're now part of our amazing community! Ready to transform your life and achieve your dreams? Let's make it happen together! 💪
+        </p>
+        <button class="welcome-btn" onclick="closeWelcomeModal()">
+          Let's Go! 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="auth.js"></script>
+  <script src="zendata.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

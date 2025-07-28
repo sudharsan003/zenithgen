@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenithGen – Diary</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="diary.css" />
+</head>
+<body>
+  <!-- Floating Elements Background -->
+  <div class="floating-elements">
+    <div class="floating-circle floating-1"></div>
+    <div class="floating-circle floating-2"></div>
+    <div class="floating-circle floating-3"></div>
+    <div class="floating-circle floating-4"></div>
+    <div class="floating-circle floating-5"></div>
+    <div class="floating-circle floating-6"></div>
+  </div>
+
+  <div class="main-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <i data-lucide="sparkles" class="sparkle-icon"></i>
+        Diary
+      </div>
+      <div class="navbar-nav">
+        <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="zenroast.html" class="nav-item"><i data-lucide="target"></i>ZenRoast</a>
+        <a href="habit_tracker.html" class="nav-item"><i data-lucide="check-circle"></i>Habits</a>
+        <a href="zenarena.html" class="nav-item"><i data-lucide="zap"></i>Arena</a>
+        <a href="zencalendar.html" class="nav-item"><i data-lucide="calendar"></i>Calendar</a>
+        <a href="zenlytics.html" class="nav-item"><i data-lucide="bar-chart-3"></i>Analytics</a>
+        <button class="nav-item logout-btn" onclick="logoutUser()"><i data-lucide="log-out"></i>Logout</button>
+      </div>
+    </nav>
+
+    <div class="dashboard-card">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1><i data-lucide="book-open"></i> Your Personal Diary</h1>
+          <p>Capture your thoughts, reflect on your day, and track your journey</p>
+          <div class="diary-streak">
+            <i data-lucide="pen-tool"></i>
+            <span id="diary-streak">0 day writing streak</span>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-content">
+        <!-- Diary Form -->
+        <div class="content-card">
+          <div class="card-header">
+            <i data-lucide="edit-3"></i>
+            <h3>Write Your Entry</h3>
+          </div>
+          <!-- Mood Section -->
+          <div class="mood-section">
+            <label class="form-label">How are you feeling today?</label>
+            <div class="mood-pills" id="moodPills">
+              <button class="mood-pill" data-mood="😊">😊 Happy</button>
+              <button class="mood-pill" data-mood="😌">😌 Calm</button>
+              <button class="mood-pill" data-mood="😔">😔 Sad</button>
+              <button class="mood-pill" data-mood="😠">😠 Angry</button>
+              <button class="mood-pill" data-mood="😰">😰 Anxious</button>
+              <button class="mood-pill" data-mood="🤔">🤔 Thoughtful</button>
+              <button class="mood-pill" data-mood="💪">💪 Motivated</button>
+              <button class="mood-pill" data-mood="🥰">🥰 Grateful</button>
+            </div>
+          </div>
+          <!-- Entry Section -->
+          <div class="entry-section">
+            <label for="diaryText" class="form-label">What's on your mind?</label>
+            <textarea 
+              id="diaryText" 
+              class="diary-textarea" 
+              rows="6" 
+              placeholder="Share your thoughts, experiences, and reflections for today..."
+            ></textarea>
+            <div class="word-count">
+              <span id="wordCount">0 words</span>
+              <div class="save-status" id="saveStatus">
+                <i data-lucide="check-circle"></i>
+                <span>Auto-saved</span>
+              </div>
+            </div>
+          </div>
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button id="saveEntry" class="save-btn">
+              <i data-lucide="save"></i>
+              Save Entry
+            </button>
+          </div>
+        </div>
+        <!-- Entries List -->
+        <div class="content-card entries-section">
+          <div class="card-header">
+            <i data-lucide="book"></i>
+            <h3>Your Recent Reflections</h3>
+            <div class="ms-auto">
+              <button class="entry-action-btn" onclick="exportEntries()" title="Export Entries">
+                <i data-lucide="download"></i>
+                Export
+              </button>
+            </div>
+          </div>
+          <div id="entriesList" class="entries-list">
+            <!-- Entries will be loaded here -->
+          </div>
+          <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">📖</div>
+            <h3 class="empty-title">No entries yet</h3>
+            <p class="empty-text">Start writing your first diary entry above!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="zendata.js"></script>
+  <script src="diary.js"></script>
+  
+  <script>
+    // Check authentication
+    checkAuth();
+    
+    lucide.createIcons();
+  </script>
+</body>
+</html>
+    

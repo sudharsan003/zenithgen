@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenithGen – Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="zenlytics.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="zendata.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Floating elements for visual appeal (match Dashboard) -->
+    <div class="floating-elements">
+      <div class="floating-circle floating-1"></div>
+      <div class="floating-circle floating-2"></div>
+      <div class="floating-circle floating-3"></div>
+      <div class="floating-circle floating-4"></div>
+    </div>
+
+    <!-- Navbar (identical to Dashboard) -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <i data-lucide="sparkles" class="sparkle-icon"></i>
+        ZenLytics
+      </div>
+      <div class="navbar-nav">
+        <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="zenroast.html" class="nav-item"><i data-lucide="target"></i>ZenRoast</a>
+        <a href="diary.html" class="nav-item"><i data-lucide="book-open"></i>Diary</a>
+        <a href="habit_tracker.html" class="nav-item"><i data-lucide="check-circle"></i>Habits</a>
+        <a href="zenarena.html" class="nav-item"><i data-lucide="zap"></i>Arena</a>
+        <a href="zencalendar.html" class="nav-item"><i data-lucide="calendar"></i>Calendar</a>
+        <button class="nav-item logout-btn" onclick="logoutUser()">
+          <i data-lucide="log-out"></i>Logout
+        </button>
+      </div>
+    </nav>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+
+    <!-- Main Analytics Content -->
+    <div class="dashboard-card">
+      <div class="dashboard-header">
+        <h1>Analytics Dashboard</h1>
+        <p>Visualize your progress and insights</p>
+      </div>
+      <main class="dashboard-content">
+        <!-- 1. Weekly Highlights (KPI cards) -->
+        <div class="content-card zl-highlights-card">
+          <div class="card-header">
+            <span>🏆</span>
+            <h3>Weekly Highlights</h3>
+          </div>
+          <div class="zl-highlights-grid">
+            <div class="zl-kpi-card">
+              <div class="zl-kpi-icon">📊</div>
+              <div class="zl-kpi-content">
+                <div class="zl-kpi-value">87%</div>
+                <div class="zl-kpi-label">Task Completion</div>
+              </div>
+            </div>
+            <div class="zl-kpi-card">
+              <div class="zl-kpi-icon">⏰</div>
+              <div class="zl-kpi-content">
+                <div class="zl-kpi-value">6.2h</div>
+                <div class="zl-kpi-label">Avg Focus Time</div>
+              </div>
+            </div>
+            <div class="zl-kpi-card">
+              <div class="zl-kpi-icon">✅</div>
+              <div class="zl-kpi-content">
+                <div class="zl-kpi-value">92%</div>
+                <div class="zl-kpi-label">Habit Consistency</div>
+              </div>
+            </div>
+            <div class="zl-kpi-card">
+              <div class="zl-kpi-icon">📝</div>
+              <div class="zl-kpi-content">
+                <div class="zl-kpi-value">14</div>
+                <div class="zl-kpi-label">Diary Entries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Mood Trends -->
+        <div class="content-card zl-chart-card">
+          <div class="card-header">
+            <span>📈</span>
+            <h3>Mood Trends</h3>
+          </div>
+          <div class="zl-chart-container">
+            <canvas id="moodTrendsChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 3. Task Completion -->
+        <div class="content-card zl-progress-card">
+          <div class="card-header">
+            <span>✅</span>
+            <h3>Task Completion</h3>
+          </div>
+          <div class="zl-progress-section">
+            <div class="zl-progress-item">
+              <div class="zl-progress-label">Daily</div>
+              <div class="zl-progress-bar">
+                <div class="zl-progress-fill" style="width: 85%"></div>
+              </div>
+              <div class="zl-progress-value">85%</div>
+            </div>
+            <div class="zl-progress-item">
+              <div class="zl-progress-label">Weekly</div>
+              <div class="zl-progress-bar">
+                <div class="zl-progress-fill" style="width: 78%"></div>
+              </div>
+              <div class="zl-progress-value">78%</div>
+            </div>
+            <div class="zl-progress-item">
+              <div class="zl-progress-label">Monthly</div>
+              <div class="zl-progress-bar">
+                <div class="zl-progress-fill" style="width: 92%"></div>
+              </div>
+              <div class="zl-progress-value">92%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Focus Patterns -->
+        <div class="content-card zl-chart-card">
+          <div class="card-header">
+            <span>🎯</span>
+            <h3>Focus Patterns</h3>
+          </div>
+          <div class="zl-chart-container">
+            <canvas id="focusPatternChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 5. Habit Breakdown (new) -->
+        <div class="content-card zl-chart-card">
+          <div class="card-header">
+            <span>🔄</span>
+            <h3>Habit Breakdown</h3>
+          </div>
+          <div class="zl-chart-container">
+            <canvas id="habitBreakdownChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 6. Top 3 Focus Hours (new) -->
+        <div class="content-card zl-focus-hours-card">
+          <div class="card-header">
+            <span>⏰</span>
+            <h3>Top 3 Focus Hours</h3>
+          </div>
+          <div class="zl-focus-hours-list" id="topFocusHours">
+            <div class="zl-focus-hour-item">
+              <div class="zl-focus-rank">1</div>
+              <div class="zl-focus-time">9:00 AM</div>
+              <div class="zl-focus-bar">
+                <div class="zl-focus-fill" style="width: 95%"></div>
+              </div>
+              <div class="zl-focus-score">95%</div>
+            </div>
+            <div class="zl-focus-hour-item">
+              <div class="zl-focus-rank">2</div>
+              <div class="zl-focus-time">2:00 PM</div>
+              <div class="zl-focus-bar">
+                <div class="zl-focus-fill" style="width: 87%"></div>
+              </div>
+              <div class="zl-focus-score">87%</div>
+            </div>
+            <div class="zl-focus-hour-item">
+              <div class="zl-focus-rank">3</div>
+              <div class="zl-focus-time">7:00 PM</div>
+              <div class="zl-focus-bar">
+                <div class="zl-focus-fill" style="width: 76%"></div>
+              </div>
+              <div class="zl-focus-score">76%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Achievements (new) -->
+        <div class="content-card zl-achievements-card">
+          <div class="card-header">
+            <span>🏅</span>
+            <h3>Achievements</h3>
+          </div>
+          <div class="zl-achievements-grid" id="achievements">
+            <div class="zl-achievement-item zl-achieved">
+              <div class="zl-achievement-icon">🔥</div>
+              <div class="zl-achievement-title">7-Day Streak</div>
+              <div class="zl-achievement-desc">Complete tasks for 7 consecutive days</div>
+            </div>
+            <div class="zl-achievement-item zl-achieved">
+              <div class="zl-achievement-icon">📚</div>
+              <div class="zl-achievement-title">Bookworm</div>
+              <div class="zl-achievement-desc">Write 10 diary entries</div>
+            </div>
+            <div class="zl-achievement-item">
+              <div class="zl-achievement-icon">⚡</div>
+              <div class="zl-achievement-title">Speed Demon</div>
+              <div class="zl-achievement-desc">Complete 5 tasks in under 2 hours</div>
+            </div>
+            <div class="zl-achievement-item zl-achieved">
+              <div class="zl-achievement-icon">🎯</div>
+              <div class="zl-achievement-title">Precision</div>
+              <div class="zl-achievement-desc">Achieve 90%+ accuracy in habit tracking</div>
+            </div>
+            <div class="zl-achievement-item">
+              <div class="zl-achievement-icon">🌅</div>
+              <div class="zl-achievement-title">Early Bird</div>
+              <div class="zl-achievement-desc">Complete 3 tasks before 9 AM</div>
+            </div>
+            <div class="zl-achievement-item">
+              <div class="zl-achievement-icon">💎</div>
+              <div class="zl-achievement-title">Diamond Focus</div>
+              <div class="zl-achievement-desc">Maintain focus for 4+ hours straight</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Productivity Heatmap (new) -->
+        <div class="content-card zl-heatmap-card">
+          <div class="card-header">
+            <span>🌡️</span>
+            <h3>Productivity Heatmap</h3>
+          </div>
+          <div class="zl-heatmap-container" id="productivityHeatmap">
+            <div class="zl-heatmap-grid"></div>
+            <div class="zl-heatmap-legend">
+              <span>Less</span>
+              <div class="zl-heatmap-legend-colors">
+                <div class="zl-heatmap-legend-color" style="background: #ebedf0"></div>
+                <div class="zl-heatmap-legend-color" style="background: #c6f6d5"></div>
+                <div class="zl-heatmap-legend-color" style="background: #9ae6b4"></div>
+                <div class="zl-heatmap-legend-color" style="background: #68d391"></div>
+                <div class="zl-heatmap-legend-color" style="background: #48bb78"></div>
+                <div class="zl-heatmap-legend-color" style="background: #38a169"></div>
+                <div class="zl-heatmap-legend-color" style="background: #2f855a"></div>
+                <div class="zl-heatmap-legend-color" style="background: #276749"></div>
+                <div class="zl-heatmap-legend-color" style="background: #22543d"></div>
+                <div class="zl-heatmap-legend-color" style="background: #1a365d"></div>
+              </div>
+              <span>More</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Streak Leaderboard (new) -->
+        <div class="content-card zl-leaderboard-card">
+          <div class="card-header">
+            <span>🔥</span>
+            <h3>Streak Leaderboard</h3>
+          </div>
+          <div class="zl-leaderboard-list" id="streakLeaderboard">
+            <div class="zl-leaderboard-item zl-top-streak">
+              <div class="zl-leaderboard-rank">1</div>
+              <div class="zl-leaderboard-icon">🔥</div>
+              <div class="zl-leaderboard-content">
+                <div class="zl-leaderboard-name">Daily Exercise</div>
+                <div class="zl-leaderboard-streak">23 days</div>
+              </div>
+            </div>
+            <div class="zl-leaderboard-item">
+              <div class="zl-leaderboard-rank">2</div>
+              <div class="zl-leaderboard-icon">📚</div>
+              <div class="zl-leaderboard-content">
+                <div class="zl-leaderboard-name">Reading Habit</div>
+                <div class="zl-leaderboard-streak">18 days</div>
+              </div>
+            </div>
+            <div class="zl-leaderboard-item">
+              <div class="zl-leaderboard-rank">3</div>
+              <div class="zl-leaderboard-icon">🧘</div>
+              <div class="zl-leaderboard-content">
+                <div class="zl-leaderboard-name">Meditation</div>
+                <div class="zl-leaderboard-streak">12 days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <script src="auth.js"></script>
+  <!-- <script src="zendata.js"></script> -->
+  <script src="zenlytics.js"></script>
+  <script>
+    // Check authentication
+    checkAuth();
+    
+    // Debug script to verify ZenData integration
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🔍 ZenLytics Debug: Checking ZenData integration...');
+      
+      // Check if zendata is available
+      if (typeof zendata !== 'undefined') {
+        console.log('✅ ZenData is available:', zendata);
+        
+        // Test getting some data
+        const allData = zendata.getAll();
+        console.log('📊 All ZenData:', allData);
+        
+        // Check specific data sources
+        const diaryEntries = zendata.get('diary.entries');
+        console.log('📝 Diary entries:', diaryEntries);
+        
+        const zenroastData = zendata.get('zenroast');
+        console.log('🎯 ZenRoast data:', zenroastData);
+        
+        const habitsData = zendata.get('habits.trackers');
+        console.log('🔄 Habits data:', habitsData);
+        
+        const calendarData = zendata.get('zencalendar.data');
+        console.log('📅 Calendar data:', calendarData);
+        
+        // Test if zenlytics is using real data
+        if (window.zenlytics) {
+          console.log('✅ ZenLytics API is available');
+          
+          // Test the data transformation
+          const analyticsData = window.zenlytics.transformZenDataToAnalytics(allData);
+          console.log('📈 Transformed analytics data:', analyticsData);
+          
+          // Check if charts are using real data
+          const moodData = window.zenlytics.getData();
+          console.log('😊 Current mood data:', moodData.moodTrends);
+        } else {
+          console.error('❌ ZenLytics API not available');
+        }
+      } else {
+        console.error('❌ ZenData is not available');
+      }
+    });
+  </script>
+</body>
+</html>

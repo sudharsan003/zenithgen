@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – ZenithGen</title>
+  <link rel="stylesheet" href="signup.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- bcrypt for password hashing -->
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Floating elements for visual appeal -->
+    <div class="floating-elements">
+      <div class="floating-circle floating-1"></div>
+      <div class="floating-circle floating-2"></div>
+      <div class="floating-circle floating-3"></div>
+      <div class="floating-circle floating-4"></div>
+    </div>
+
+    <!-- Left side image - Distracted boy -->
+    <div class="side-image left-image">
+      <img src="./images/distracted_boy.webp" alt="Distracted mind" />
+      <p>Before ZenithGen 😵‍💫</p>
+    </div>
+
+    <!-- Right side image - Focused boy -->
+    <div class="side-image right-image">
+      <img src="./images/focused_boy.webp" alt="Focused mind" />
+      <p>After ZenithGen ⚡</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+      <!-- Header -->
+      <div class="card-header">
+        <div class="icon-container">
+          <i data-lucide="sparkles" class="sparkle-icon"></i>
+          <div class="ping-dot"></div>
+        </div>
+        <h1 class="card-title">Welcome Back! 👋</h1>
+        <p class="card-subtitle">Ready to continue your journey?</p>
+      </div>
+
+      <!-- Content -->
+      <div class="card-content">
+        <!-- Form -->
+        <div class="form-container">
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              placeholder="your_cool_username"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <div class="password-container">
+              <input 
+                type="password" 
+                id="password" 
+                placeholder="super_secret_password"
+                required
+              />
+              <button type="button" class="password-toggle" onclick="togglePassword()">
+                <i data-lucide="eye" id="eyeIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="main-button" onclick="handleLogin()">
+            Let's Go! 🚀
+          </button>
+        </div>
+
+        <!-- Toggle Section -->
+        <div class="toggle-section">
+          <p>
+            <span>New here? </span>
+            <button class="toggle-button" onclick="window.location.href='index.html'">
+              Sign up instead! ✨
+            </button>
+          </p>
+        </div>
+
+        <!-- Motivational text -->
+        <div class="motivational-text">
+          <p>"Your future self is rooting for you! 💪"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <script src="signup.js"></script>
+</body>
+</html>

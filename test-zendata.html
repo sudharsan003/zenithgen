@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenData Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+    .success { color: green; }
+    .error { color: red; }
+    .info { color: blue; }
+    button { margin: 5px; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🔍 ZenData Integration Test</h1>
+  
+  <div class="test-section">
+    <h2>1. ZenData Availability</h2>
+    <div id="zendata-status">Checking...</div>
+  </div>
+  
+  <div class="test-section">
+    <h2>2. Test Data Operations</h2>
+    <button onclick="addTestData()">Add Test Data</button>
+    <button onclick="checkTestData()">Check Test Data</button>
+    <button onclick="clearTestData()">Clear Test Data</button>
+    <div id="test-data-status">No test data added yet</div>
+  </div>
+  
+  <div class="test-section">
+    <h2>3. ZenLytics Integration</h2>
+    <button onclick="testZenLytics()">Test ZenLytics Connection</button>
+    <div id="zenlytics-status">Not tested yet</div>
+  </div>
+  
+  <div class="test-section">
+    <h2>4. Data Display</h2>
+    <div id="data-display">No data to display</div>
+  </div>
+
+  <script src="zendata.js"></script>
+  <script>
+    // Test ZenData availability
+    function checkZenDataAvailability() {
+      const statusDiv = document.getElementById('zendata-status');
+      
+      if (typeof zendata !== 'undefined') {
+        statusDiv.innerHTML = '<span class="success">✅ ZenData is available</span>';
+        console.log('✅ ZenData API:', zendata);
+        
+        // Test basic operations
+        try {
+          const allData = zendata.getAll();
+          console.log('📊 All ZenData:', allData);
+          statusDiv.innerHTML += '<br><span class="info">📊 ZenData contains ' + Object.keys(allData).length + ' pages</span>';
+        } catch (error) {
+          statusDiv.innerHTML += '<br><span class="error">❌ Error getting data: ' + error.message + '</span>';
+        }
+      } else {
+        statusDiv.innerHTML = '<span class="error">❌ ZenData is not available</span>';
+        console.error('❌ ZenData not found');
+      }
+    }
+    
+    // Add test data
+    function addTestData() {
+      if (typeof zendata === 'undefined') {
+        alert('ZenData not available');
+        return;
+      }
+      
+      try {
+        // Add diary entries
+        const diaryEntries = [
+          { id: 1, text: 'Had a great day today!', mood: 8, date: new Date().toISOString(), wordCount: 15 },
+          { id: 2, text: 'Feeling productive', mood: 9, date: new Date(Date.now() - 86400000).toISOString(), wordCount: 12 },
+          { id: 3, text: 'Need to focus more', mood: 6, date: new Date(Date.now() - 172800000).toISOString(), wordCount: 18 }
+        ];
+        
+        diaryEntries.forEach(entry => {
+          zendata.push('diary', 'entries', entry);
+        });
+        
+        // Add habit trackers
+        const habits = [
+          { id: 1, name: 'Exercise', streak: 5, longestStreak: 10, lastCheck: new Date().toISOString(), createdAt: new Date(Date.now() - 86400000 * 10).toISOString(), totalCheckins: 8, category: 'health' },
+          { id: 2, name: 'Reading', streak: 3, longestStreak: 7, lastCheck: new Date().toISOString(), createdAt: new Date(Date.now() - 86400000 * 15).toISOString(), totalCheckins: 12, category: 'learning' },
+          { id: 3, name: 'Meditation', streak: 2, longestStreak: 5, lastCheck: new Date().toISOString(), createdAt: new Date(Date.now() - 86400000 * 20).toISOString(), totalCheckins: 6, category: 'wellness' }
+        ];
+        
+        habits.forEach(habit => {
+          zendata.push('habits', 'trackers', habit);
+        });
+        
+        // Add ZenRoast entries
+        const zenroastEntries = [
+          { id: 1, text: 'Focused on coding', time: new Date().toISOString() },
+          { id: 2, text: 'Distracted by phone', time: new Date(Date.now() - 3600000).toISOString() },
+          { id: 3, text: 'Deep focus session', time: new Date(Date.now() - 7200000).toISOString() }
+        ];
+        
+        zenroastEntries.forEach(entry => {
+          zendata.push('zenroast', 'entries', entry);
+        });
+        
+        // Add calendar tasks
+        const today = new Date().toISOString().split('T')[0];
+        const calendarData = {
+          [today]: {
+            tasks: [
+              { id: 1, text: 'Complete project', completed: true, time: '9:00' },
+              { id: 2, text: 'Exercise', completed: false, time: '14:00' },
+              { id: 3, text: 'Read book', completed: true, time: '20:00' }
+            ]
+          }
+        };
+        
+        zendata.set('zencalendar.data', calendarData);
+        
+        document.getElementById('test-data-status').innerHTML = '<span class="success">✅ Test data added successfully</span>';
+        console.log('✅ Test data added');
+        
+      } catch (error) {
+        document.getElementById('test-data-status').innerHTML = '<span class="error">❌ Error adding test data: ' + error.message + '</span>';
+        console.error('❌ Error adding test data:', error);
+      }
+    }
+    
+    // Check test data
+    function checkTestData() {
+      if (typeof zendata === 'undefined') {
+        alert('ZenData not available');
+        return;
+      }
+      
+      try {
+        const diaryEntries = zendata.get('diary.entries');
+        const habits = zendata.get('habits.trackers');
+        const zenroastEntries = zendata.get('zenroast.entries');
+        const calendarData = zendata.get('zencalendar.data');
+        
+        const status = document.getElementById('test-data-status');
+        status.innerHTML = `
+          <span class="info">📊 Test Data Summary:</span><br>
+          📝 Diary entries: ${diaryEntries ? diaryEntries.length : 0}<br>
+          🔄 Habits: ${habits ? habits.length : 0}<br>
+          🎯 ZenRoast entries: ${zenroastEntries ? zenroastEntries.length : 0}<br>
+          📅 Calendar data: ${calendarData ? Object.keys(calendarData).length : 0} days
+        `;
+        
+        console.log('📊 Test data summary:', {
+          diaryEntries,
+          habits,
+          zenroastEntries,
+          calendarData
+        });
+        
+      } catch (error) {
+        document.getElementById('test-data-status').innerHTML = '<span class="error">❌ Error checking test data: ' + error.message + '</span>';
+        console.error('❌ Error checking test data:', error);
+      }
+    }
+    
+    // Clear test data
+    function clearTestData() {
+      if (typeof zendata === 'undefined') {
+        alert('ZenData not available');
+        return;
+      }
+      
+      try {
+        zendata.set('diary.entries', []);
+        zendata.set('habits.trackers', []);
+        zendata.set('zenroast.entries', []);
+        zendata.set('zencalendar.data', {});
+        
+        document.getElementById('test-data-status').innerHTML = '<span class="success">✅ Test data cleared</span>';
+        console.log('✅ Test data cleared');
+        
+      } catch (error) {
+        document.getElementById('test-data-status').innerHTML = '<span class="error">❌ Error clearing test data: ' + error.message + '</span>';
+        console.error('❌ Error clearing test data:', error);
+      }
+    }
+    
+    // Test ZenLytics integration
+    function testZenLytics() {
+      const statusDiv = document.getElementById('zenlytics-status');
+      
+      if (typeof window.zenlytics !== 'undefined') {
+        statusDiv.innerHTML = '<span class="success">✅ ZenLytics API is available</span>';
+        
+        try {
+          const allData = zendata.getAll();
+          const analyticsData = window.zenlytics.transformZenDataToAnalytics(allData);
+          
+          statusDiv.innerHTML += '<br><span class="info">📈 Analytics data transformed successfully</span>';
+          console.log('📈 Transformed analytics data:', analyticsData);
+          
+          // Test KPI card functionality
+          const hasRealData = window.zenlytics.hasRealUserData(allData);
+          statusDiv.innerHTML += `<br><span class="info">🔍 Has real user data: ${hasRealData}</span>`;
+          
+          if (hasRealData) {
+            window.zenlytics.updateKPICards(allData);
+            statusDiv.innerHTML += '<br><span class="success">✅ KPI cards updated with real data</span>';
+          } else {
+            statusDiv.innerHTML += '<br><span class="info">📊 No real data, KPI cards show placeholder values</span>';
+          }
+          
+        } catch (error) {
+          statusDiv.innerHTML += '<br><span class="error">❌ Error transforming data: ' + error.message + '</span>';
+          console.error('❌ Error transforming data:', error);
+        }
+      } else {
+        statusDiv.innerHTML = '<span class="error">❌ ZenLytics API not available</span>';
+        console.error('❌ ZenLytics not found');
+      }
+    }
+    
+    // Display current data
+    function displayData() {
+      if (typeof zendata === 'undefined') {
+        document.getElementById('data-display').innerHTML = '<span class="error">❌ ZenData not available</span>';
+        return;
+      }
+      
+      try {
+        const allData = zendata.getAll();
+        const displayDiv = document.getElementById('data-display');
+        
+        displayDiv.innerHTML = `
+          <h3>Current ZenData:</h3>
+          <pre>${JSON.stringify(allData, null, 2)}</pre>
+        `;
+        
+      } catch (error) {
+        document.getElementById('data-display').innerHTML = '<span class="error">❌ Error displaying data: ' + error.message + '</span>';
+      }
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🔍 ZenData Test Page Loaded');
+      checkZenDataAvailability();
+      
+      // Auto-display data every 5 seconds
+      setInterval(displayData, 5000);
+      displayData();
+    });
+  </script>
+</body>
+</html> 

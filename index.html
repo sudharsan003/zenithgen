@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup – ZenithGen</title>
+  <link rel="stylesheet" href="signup.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- bcrypt for password hashing -->
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Floating elements for visual appeal -->
+    <div class="floating-elements">
+      <div class="floating-circle floating-1"></div>
+      <div class="floating-circle floating-2"></div>
+      <div class="floating-circle floating-3"></div>
+      <div class="floating-circle floating-4"></div>
+    </div>
+
+    <!-- Left side image - Distracted boy -->
+    <div class="side-image left-image">
+      <img src="./images/distracted_boy.webp" alt="Distracted mind" />
+      <p>Before ZenithGen 😵‍💫</p>
+    </div>
+
+    <!-- Right side image - Focused boy -->
+    <div class="side-image right-image">
+      <img src="./images/focused_boy.webp" alt="Focused mind" />
+      <p>After ZenithGen ⚡</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+      <!-- Header -->
+      <div class="card-header">
+        <div class="icon-container">
+          <i data-lucide="sparkles" class="sparkle-icon"></i>
+          <div class="ping-dot"></div>
+        </div>
+        <h1 class="card-title" id="cardTitle">Join ZenithGen! ✨</h1>
+        <p class="card-subtitle" id="cardSubtitle">Where goals meet reality 🎯</p>
+      </div>
+
+      <!-- Content -->
+      <div class="card-content">
+        <!-- Features showcase for signup -->
+        <div class="features-grid" id="featuresGrid">
+          <div class="feature-item feature-purple">
+            <i data-lucide="target"></i>
+            <span>Goals</span>
+          </div>
+          <div class="feature-item feature-pink">
+            <i data-lucide="book-open"></i>
+            <span>Journal</span>
+          </div>
+          <div class="feature-item feature-blue">
+            <i data-lucide="bell"></i>
+            <span>Reminders</span>
+          </div>
+          <div class="feature-item feature-green">
+            <i data-lucide="sparkles"></i>
+            <span>Insights</span>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-container">
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              placeholder="your_cool_username"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="password">Password</label>
+            <div class="password-container">
+              <input 
+                type="password" 
+                id="password" 
+                placeholder="super_secret_password"
+                required
+              />
+              <button type="button" class="password-toggle" onclick="togglePassword()">
+                <i data-lucide="eye" id="eyeIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="main-button" onclick="handleSubmit()" id="mainButton">
+            Join the Squad! 🎉
+          </button>
+        </div>
+
+        <!-- Toggle Section -->
+        <div class="toggle-section">
+          <p>
+            <span>Already part of the crew? </span>
+            <button class="toggle-button" onclick="redirectToLogin()">
+              Log in! 👋
+            </button>
+          </p>
+        </div>
+
+        <!-- Motivational text -->
+        <div class="motivational-text">
+          <p>"Your future self is rooting for you! 💪"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <script src="signup.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZenithGen – Calendar</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="zencalendar.css" />
+  <!-- ZenData -->
+  <script src="zendata.js"></script>
+</head>
+<body>
+  <!-- Floating Elements Background -->
+  <div class="floating-elements">
+    <div class="floating-circle floating-1"></div>
+    <div class="floating-circle floating-2"></div>
+    <div class="floating-circle floating-3"></div>
+    <div class="floating-circle floating-4"></div>
+    <div class="floating-circle floating-5"></div>
+    <div class="floating-circle floating-6"></div>
+  </div>
+
+  <div class="main-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <i data-lucide="calendar" class="sparkle-icon"></i>
+        Calendar
+      </div>
+      <div class="navbar-nav">
+        <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="zenroast.html" class="nav-item"><i data-lucide="target"></i>ZenRoast</a>
+        <a href="diary.html" class="nav-item"><i data-lucide="book-open"></i>Diary</a>
+        <a href="habit_tracker.html" class="nav-item"><i data-lucide="target"></i>Habits</a>
+        <a href="zenarena.html" class="nav-item"><i data-lucide="zap"></i>Arena</a>
+        <a href="zenlytics.html" class="nav-item"><i data-lucide="bar-chart-3"></i>Analytics</a>
+        <button class="nav-item logout-btn" onclick="logoutUser()"><i data-lucide="log-out"></i>Logout</button>
+      </div>
+    </nav>
+
+    <div class="dashboard-card">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1><i data-lucide="calendar"></i> Calendar</h1>
+          <p>Plan your perfect day, track your streaks, and stay organized!</p>
+        </div>
+      </div>
+      <div class="dashboard-content">
+        <!-- Calendar Navigation + Grid Wrapper (centered) -->
+        <div class="zc-calendar-section">
+          <div class="zc-calendar-nav-row">
+            <button id="zc-prev-month" class="zc-nav-btn"><i data-lucide="chevron-left"></i></button>
+            <span id="zc-current-month" class="zc-current-month"></span>
+            <button id="zc-next-month" class="zc-nav-btn"><i data-lucide="chevron-right"></i></button>
+          </div>
+          <div class="content-card zc-calendar-card">
+            <div id="zc-calendar-grid" class="zc-calendar-grid"></div>
+          </div>
+        </div>
+
+        <!-- ZenCalendar Feature: Drag & Drop Task Board -->
+        <div class="content-card zc-task-board-card">
+          <div class="card-header">
+            <i data-lucide="list-todo"></i>
+            <h3>Task Board</h3>
+          </div>
+          <div id="zc-task-board" class="zc-task-board"></div>
+          <div class="zc-task-board-hint">Drag tasks onto calendar days!</div>
+        </div>
+
+        <!-- ZenCalendar Feature: Time-Blocking Timeline -->
+        <div class="content-card zc-timeline-card">
+          <div class="card-header">
+            <i data-lucide="clock"></i>
+            <h3>Time-Blocking Timeline</h3>
+          </div>
+          <div id="zc-timeline" class="zc-timeline"></div>
+          <div id="zc-timeline-slots" class="zc-timeline-slots"></div>
+          <form id="zc-timeline-form" class="zc-timeline-form">
+            <input type="time" id="zc-timeline-time" class="zc-timeline-input" required />
+            <input type="time" id="zc-timeline-end-time" class="zc-timeline-input" placeholder="End time (optional)" />
+            <input type="text" id="zc-timeline-label" class="zc-timeline-input" placeholder="Activity (e.g. Workout)" required />
+            <button type="submit" class="zc-timeline-add-btn"><i data-lucide="plus"></i> Add Slot</button>
+          </form>
+        </div>
+
+        <!-- ZenCalendar Feature: Streak Flame Widget -->
+        <div class="content-card zc-streak-flame-card">
+          <div class="card-header">
+            <i data-lucide="flame"></i>
+            <h3>Streak</h3>
+          </div>
+          <div id="zc-streak-flame" class="zc-streak-flame-widget"></div>
+        </div>
+
+        <!-- ZenCalendar Feature: Productivity / Mood Heatmap -->
+        <div class="content-card zc-heatmap-card">
+          <div class="card-header">
+            <i data-lucide="thermometer"></i>
+            <h3>Productivity & Mood Heatmap</h3>
+          </div>
+          <div id="zc-heatmap" class="zc-heatmap"></div>
+        </div>
+
+        <!-- Date-wise To-Do Grid Section -->
+        <div class="content-card zc-todo-card" id="todo-grid-card">
+          <div class="card-header">
+            <i data-lucide="list"></i>
+            <h3>Date-wise To-Do List</h3>
+          </div>
+          <div class="zc-selected-date-row">
+            <span id="zc-selected-date-display" class="zc-selected-date-display"></span>
+          </div>
+          <div class="todo-grid" id="todoGrid"></div>
+        </div>
+
+        <!-- Quote of the Day Widget -->
+        <div class="content-card zc-quote-card">
+          <div class="card-header">
+            <i data-lucide="quote"></i>
+            <h3>Quote of the Day</h3>
+            <button id="zc-new-quote-btn" class="zc-quote-refresh-btn" title="New Quote"><i data-lucide="refresh-ccw"></i></button>
+          </div>
+          <div class="zc-quote-content">
+            <blockquote id="zc-daily-quote" class="zc-daily-quote"></blockquote>
+            <div id="zc-quote-author" class="zc-quote-author"></div>
+          </div>
+        </div>
+
+        <!-- Weekly Goals Widget -->
+        <div class="content-card zc-weekly-goals-card">
+          <div class="card-header">
+            <i data-lucide="target"></i>
+            <h3>Weekly Goals</h3>
+          </div>
+          <ul id="zc-weekly-goals-list" class="zc-weekly-goals-list"></ul>
+          <form id="zc-weekly-goals-form" class="zc-weekly-goals-form">
+            <input type="text" id="zc-weekly-goal-input" class="zc-weekly-goal-input" placeholder="Add a new goal..." required />
+            <button type="submit" class="zc-weekly-goal-add-btn"><i data-lucide="plus"></i></button>
+          </form>
+        </div>
+
+        <!-- Progress Tracker Widget (fills empty space below Weekly Goals) -->
+        <div class="content-card zc-progress-tracker-card">
+          <div class="card-header">
+            <i data-lucide="check-circle"></i>
+            <h3>Tasks Completed Today</h3>
+          </div>
+          <div class="zc-progress-tracker-content">
+            <div id="zc-progress-circle" class="zc-progress-circle"></div>
+            <div id="zc-progress-label" class="zc-progress-label"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Buttons and Modals (if any) -->
+  <!-- (Insert ZenRoast-style FABs and modals here) -->
+
+  <script src="auth.js"></script>
+  <script src="zencalendar.js"></script>
+  <script>
+    // Check authentication
+    checkAuth();
+    
+    lucide.createIcons();
+  </script>
+</body>
+</html>
