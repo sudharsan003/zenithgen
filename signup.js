@@ -97,6 +97,17 @@ function showToast(title, description, type = 'success') {
   }, 4000);
 }
 
+// Get users from localStorage
+function getUsers() {
+  const users = localStorage.getItem('zenithgen_users');
+  return users ? JSON.parse(users) : {};
+}
+
+// Save users to localStorage
+function saveUsers(users) {
+  localStorage.setItem('zenithgen_users', JSON.stringify(users));
+}
+
 async function handleSignup() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
@@ -132,7 +143,18 @@ async function handleSignup() {
     return;
   }
   
-  // Hash password before sending to API
+  // Check if user already exists
+  const users = getUsers();
+  if (users[username]) {
+    showToast(
+      "Plot twist! 😅",
+      "That username is already taken. Try another one!",
+      "error"
+    );
+    return;
+  }
+  
+  // Hash password
   try {
     let hashedPassword;
     
@@ -146,35 +168,13 @@ async function handleSignup() {
       hashedPassword = await simpleHash(password);
     }
     
-    // Send POST request to ZenData API
-    const response = await fetch('/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: hashedPassword
-      })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      if (response.status === 409) {
-        showToast(
-          "Plot twist! 😅",
-          "That username is already taken. Try another one!",
-          "error"
-        );
-      } else {
-        showToast(
-          "Oops! Something went wrong! 😅",
-          errorData.message || "Please try again later.",
-          "error"
-        );
-      }
-      return;
-    }
+    // Save user to localStorage
+    users[username] = {
+      password: hashedPassword,
+      createdAt: new Date().toISOString(),
+      lastLogin: null
+    };
+    saveUsers(users);
     
     // Save current user info in localStorage (not password)
     localStorage.setItem('currentUser', username);
@@ -211,36 +211,45 @@ async function handleLogin() {
     return;
   }
   
-  // Send POST request to ZenData API for verification
+  // Get users from localStorage
+  const users = getUsers();
+  const user = users[username];
+  
+  if (!user) {
+    showToast(
+      "Nah, that ain't it chief 🚫",
+      "Invalid credentials. Try again!",
+      "error"
+    );
+    return;
+  }
+  
+  // Verify password
   try {
-    const response = await fetch('/users/verify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
-    });
+    let isValid = false;
     
-    if (!response.ok) {
-      const errorData = await response.json();
-      if (response.status === 401) {
-        showToast(
-          "Nah, that ain't it chief 🚫",
-          "Invalid credentials. Try again!",
-          "error"
-        );
-      } else {
-        showToast(
-          "Oops! Something went wrong! 😅",
-          errorData.message || "Please try again later.",
-          "error"
-        );
-      }
+    // Check if bcrypt is available
+    if (ensureBcryptLoaded()) {
+      // Use bcrypt if available
+      isValid = await bcrypt.compare(password, user.password);
+    } else {
+      // Use fallback SHA-256 hashing
+      const hashedPassword = await simpleHash(password);
+      isValid = (hashedPassword === user.password);
+    }
+    
+    if (!isValid) {
+      showToast(
+        "Nah, that ain't it chief 🚫",
+        "Invalid credentials. Try again!",
+        "error"
+      );
       return;
     }
+    
+    // Update last login
+    user.lastLogin = new Date().toISOString();
+    saveUsers(users);
     
     // Save current user info in sessionStorage (not password)
     sessionStorage.setItem("currentUser", username);

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth Test - ZenithGen</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+    .success { background-color: #d4edda; border-color: #c3e6cb; }
+    .error { background-color: #f8d7da; border-color: #f5c6cb; }
+    button { padding: 10px 15px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-success { background-color: #28a745; color: white; }
+    .btn-danger { background-color: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+  <h1>🔐 ZenithGen Authentication Test</h1>
+  
+  <div class="test-section">
+    <h3>Current State</h3>
+    <div id="currentState"></div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Test Authentication</h3>
+    <button class="btn-primary" onclick="testSignup()">Test Signup</button>
+    <button class="btn-success" onclick="testLogin()">Test Login</button>
+    <button class="btn-danger" onclick="clearData()">Clear All Data</button>
+  </div>
+  
+  <div class="test-section">
+    <h3>Test Results</h3>
+    <div id="testResults"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <script src="signup.js"></script>
+  <script>
+    function updateCurrentState() {
+      const users = getUsers();
+      const currentUser = sessionStorage.getItem('currentUser');
+      const localStorageUser = localStorage.getItem('currentUser');
+      
+      document.getElementById('currentState').innerHTML = `
+        <p><strong>Users in localStorage:</strong> ${Object.keys(users).length}</p>
+        <p><strong>Current User (sessionStorage):</strong> ${currentUser || 'None'}</p>
+        <p><strong>Current User (localStorage):</strong> ${localStorageUser || 'None'}</p>
+        <p><strong>User List:</strong> ${Object.keys(users).join(', ') || 'None'}</p>
+      `;
+    }
+    
+    function testSignup() {
+      const testUser = 'testuser_' + Date.now();
+      const testPass = 'TestPass123!';
+      
+      // Simulate signup
+      const users = getUsers();
+      if (users[testUser]) {
+        addResult('❌ Test user already exists', 'error');
+        return;
+      }
+      
+      // Hash password (using the same logic as signup.js)
+      simpleHash(testPass).then(hashedPassword => {
+        users[testUser] = {
+          password: hashedPassword,
+          createdAt: new Date().toISOString(),
+          lastLogin: null
+        };
+        saveUsers(users);
+        
+        addResult(`✅ Created test user: ${testUser}`, 'success');
+        updateCurrentState();
+      });
+    }
+    
+    function testLogin() {
+      const users = getUsers();
+      const testUser = Object.keys(users)[0];
+      
+      if (!testUser) {
+        addResult('❌ No users found to test login', 'error');
+        return;
+      }
+      
+      // Simulate login with a known password
+      const testPass = 'TestPass123!';
+      const user = users[testUser];
+      
+      simpleHash(testPass).then(hashedPassword => {
+        const isValid = (hashedPassword === user.password);
+        
+        if (isValid) {
+          sessionStorage.setItem('currentUser', testUser);
+          addResult(`✅ Login successful for: ${testUser}`, 'success');
+        } else {
+          addResult(`❌ Login failed for: ${testUser}`, 'error');
+        }
+        updateCurrentState();
+      });
+    }
+    
+    function clearData() {
+      localStorage.removeItem('zenithgen_users');
+      sessionStorage.removeItem('currentUser');
+      localStorage.removeItem('currentUser');
+      addResult('🗑️ All authentication data cleared', 'success');
+      updateCurrentState();
+    }
+    
+    function addResult(message, type) {
+      const results = document.getElementById('testResults');
+      const div = document.createElement('div');
+      div.className = `test-section ${type}`;
+      div.innerHTML = `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+      results.appendChild(div);
+    }
+    
+    // Initialize
+    updateCurrentState();
+  </script>
+</body>
+</html> 
