@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Goals Streak Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+    .success { background-color: #d4edda; border-color: #c3e6cb; }
+    .error { background-color: #f8d7da; border-color: #f5c6cb; }
+    .info { background-color: #d1ecf1; border-color: #bee5eb; }
+    button { padding: 10px 15px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-success { background-color: #28a745; color: white; }
+    .btn-danger { background-color: #dc3545; color: white; }
+    .streak-display { font-size: 24px; font-weight: bold; color: #a855f7; }
+  </style>
+</head>
+<body>
+  <h1>🎯 Weekly Goals Streak Test</h1>
+  
+  <div class="test-section">
+    <h3>Current Streak</h3>
+    <div id="currentStreak" class="streak-display">Loading...</div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Test Controls</h3>
+    <button class="btn-primary" onclick="addTestGoal()">Add Test Goal</button>
+    <button class="btn-success" onclick="completeGoal()">Complete Goal</button>
+    <button class="btn-danger" onclick="resetStreak()">Reset Streak</button>
+    <button class="btn-primary" onclick="showDebugInfo()">Show Debug Info</button>
+  </div>
+  
+  <div class="test-section">
+    <h3>Test Results</h3>
+    <div id="testResults"></div>
+  </div>
+
+  <script src="zendata.js"></script>
+  <script src="zencalendar.js"></script>
+  <script>
+    function addResult(message, type = 'info') {
+      const results = document.getElementById('testResults');
+      const div = document.createElement('div');
+      div.className = `test-section ${type}`;
+      div.innerHTML = `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+      results.appendChild(div);
+    }
+    
+    function updateStreakDisplay() {
+      const streak = zendata.get('zencalendar.streak') || 0;
+      document.getElementById('currentStreak').textContent = `${streak} day${streak !== 1 ? 's' : ''}`;
+    }
+    
+    function addTestGoal() {
+      const goals = zendata.get('zencalendar.weeklyGoals') || [];
+      const testGoal = { text: `Test Goal ${goals.length + 1}`, completed: false };
+      goals.push(testGoal);
+      zendata.set('zencalendar.weeklyGoals', goals);
+      addResult(`✅ Added test goal: "${testGoal.text}"`, 'success');
+      updateStreakDisplay();
+    }
+    
+    function completeGoal() {
+      const goals = zendata.get('zencalendar.weeklyGoals') || [];
+      if (goals.length === 0) {
+        addResult('❌ No goals to complete. Add a goal first.', 'error');
+        return;
+      }
+      
+      // Complete the first goal
+      goals[0].completed = true;
+      zendata.set('zencalendar.weeklyGoals', goals);
+      
+      // Track completion for today
+      const todayKey = getDateKey(new Date());
+      const weeklyGoalsCompletedToday = zendata.get('zencalendar.weeklyGoalsCompletedToday') || [];
+      if (!weeklyGoalsCompletedToday.includes(goals[0].text)) {
+        weeklyGoalsCompletedToday.push(goals[0].text);
+        zendata.set('zencalendar.weeklyGoalsCompletedToday', weeklyGoalsCompletedToday);
+      }
+      
+      // Update streak
+      if (typeof window.updateStreak === 'function') {
+        window.updateStreak();
+      }
+      
+      addResult(`✅ Completed goal: "${goals[0].text}"`, 'success');
+      updateStreakDisplay();
+    }
+    
+    function resetStreak() {
+      zendata.set('zencalendar.streak', 0);
+      zendata.set('zencalendar.weeklyGoalsCompletedToday', []);
+      addResult('🗑️ Streak reset to 0', 'info');
+      updateStreakDisplay();
+    }
+    
+    function showDebugInfo() {
+      const streak = zendata.get('zencalendar.streak') || 0;
+      const weeklyGoals = zendata.get('zencalendar.weeklyGoals') || [];
+      const completedToday = zendata.get('zencalendar.weeklyGoalsCompletedToday') || [];
+      const lastCompletionDate = zendata.get('zencalendar.lastCompletionDate');
+      
+      console.log('🔍 Debug Info:', {
+        streak,
+        weeklyGoals,
+        completedToday,
+        lastCompletionDate,
+        today: new Date().toDateString()
+      });
+      
+      addResult(`🔍 Debug info logged to console. Streak: ${streak}, Goals: ${weeklyGoals.length}, Completed today: ${completedToday.length}`, 'info');
+    }
+    
+    // Helper function from zencalendar.js
+    function getDateKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+    
+    // Initialize
+    updateStreakDisplay();
+    addResult('🚀 Streak test initialized. Add a goal and complete it to test streak calculation.', 'info');
+  </script>
+</body>
+</html> 

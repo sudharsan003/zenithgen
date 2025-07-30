@@ -96,6 +96,17 @@
       ZC_IGNORE_PUBLISH = false;
     }
     
+    // 🎯 BUG FIX: Clear daily completion tracking if it's a new day
+    const today = new Date().toDateString();
+    const lastCompletionDate = zendata.get('zencalendar.lastCompletionDate');
+    if (lastCompletionDate !== today) {
+      ZC_IGNORE_PUBLISH = true;
+      zendata.set('zencalendar.weeklyGoalsCompletedToday', []);
+      zendata.set('zencalendar.lastCompletionDate', today);
+      ZC_IGNORE_PUBLISH = false;
+      console.log('🎯 Cleared daily completion tracking for new day');
+    }
+    
     // Update streak on page load to ensure it's current
     updateStreak();
     
@@ -111,6 +122,7 @@
   }
 
   // 🚀 CRITICAL PERFORMANCE FIX: Fixed infinite loop in updateStreak
+  // 🎯 BUG FIX: Fixed streak calculation to properly count daily completions
   function updateStreak() {
     const today = new Date().toDateString();
     const lastStreakDate = zendata.get('zencalendar.lastStreakDate');
@@ -127,11 +139,13 @@
     const todaySlots = timelineSlots[todayKey] || [];
     const completedSlots = todaySlots.filter(s => s.completed).length;
     
-    // Check completed weekly goals for today
+    // 🎯 BUG FIX: Check completed weekly goals for TODAY only, not all time
+    // We need to track when weekly goals were completed, not just if they're completed
     const weeklyGoals = zendata.get('zencalendar.weeklyGoals') || [];
-    const completedGoals = weeklyGoals.filter(g => g.completed).length;
+    const weeklyGoalsCompletedToday = zendata.get('zencalendar.weeklyGoalsCompletedToday') || [];
+    const completedGoalsToday = weeklyGoalsCompletedToday.length;
     
-    const hasCompletedItems = completedTasks > 0 || completedSlots > 0 || completedGoals > 0;
+    const hasCompletedItems = completedTasks > 0 || completedSlots > 0 || completedGoalsToday > 0;
     
     console.log('🔥 Streak calculation debug:', {
       today,
@@ -140,7 +154,7 @@
       todayKey,
       completedTasks,
       completedSlots,
-      completedGoals,
+      completedGoalsToday,
       hasCompletedItems
     });
     
@@ -157,7 +171,10 @@
       const checkTasks = checkData.tasks.filter(t => t.completed).length;
       const checkSlots = timelineSlots[checkKey] || [];
       const checkCompletedSlots = checkSlots.filter(s => s.completed).length;
-      const checkWeeklyGoals = weeklyGoals.filter(g => g.completed).length;
+      
+      // 🎯 BUG FIX: Check if any weekly goals were completed on this specific day
+      const weeklyGoalsCompletedOnDay = zendata.get(`zencalendar.weeklyGoalsCompleted.${checkKey}`) || [];
+      const checkWeeklyGoals = weeklyGoalsCompletedOnDay.length;
       
       const hasItems = checkTasks > 0 || checkCompletedSlots > 0 || checkWeeklyGoals > 0;
       
@@ -471,6 +488,9 @@
     updateStreak();
     renderStreakFlame();
   };
+  
+  // 🎯 BUG FIX: Expose updateStreak function for testing
+  window.updateStreak = updateStreak;
   
   // 🚀 PERFORMANCE FIX: Performance monitoring function for debugging
   window.zcPerformanceReport = function() {
@@ -817,6 +837,7 @@
   }
   
   // 🚀 PERFORMANCE FIX: Optimized Weekly Goal Completion Toggle
+  // 🎯 BUG FIX: Added proper tracking of when weekly goals are completed
   function toggleWeeklyGoalCompletion(goalIndex) {
     const startTime = performance.now();
     
@@ -826,14 +847,42 @@
         // Convert string goal to object format
         goals[goalIndex] = { text: goals[goalIndex], completed: false };
       }
+      
+      const wasCompleted = goals[goalIndex].completed;
       goals[goalIndex].completed = !goals[goalIndex].completed;
       setWeeklyGoals(goals);
       console.log(`🎯 Weekly goal "${goals[goalIndex].text}" ${goals[goalIndex].completed ? 'completed' : 'uncompleted'}`);
       
-      // 🚀 PERFORMANCE FIX: Only update streak if this is today and only render affected components
+      // 🎯 BUG FIX: Track when weekly goals are completed on specific days
       const todayKey = getDateKey(new Date());
       const selectedKey = getDateKey(zcSelectedDate);
+      
       if (selectedKey === todayKey) {
+        // Track completion for today
+        const weeklyGoalsCompletedToday = zendata.get('zencalendar.weeklyGoalsCompletedToday') || [];
+        
+        if (goals[goalIndex].completed && !wasCompleted) {
+          // Goal was just completed today
+          if (!weeklyGoalsCompletedToday.includes(goals[goalIndex].text)) {
+            weeklyGoalsCompletedToday.push(goals[goalIndex].text);
+            ZC_IGNORE_PUBLISH = true;
+            zendata.set('zencalendar.weeklyGoalsCompletedToday', weeklyGoalsCompletedToday);
+            ZC_IGNORE_PUBLISH = false;
+            console.log(`🎯 Tracked weekly goal completion for today: ${goals[goalIndex].text}`);
+          }
+        } else if (!goals[goalIndex].completed && wasCompleted) {
+          // Goal was just uncompleted today
+          const index = weeklyGoalsCompletedToday.indexOf(goals[goalIndex].text);
+          if (index > -1) {
+            weeklyGoalsCompletedToday.splice(index, 1);
+            ZC_IGNORE_PUBLISH = true;
+            zendata.set('zencalendar.weeklyGoalsCompletedToday', weeklyGoalsCompletedToday);
+            ZC_IGNORE_PUBLISH = false;
+            console.log(`🎯 Removed weekly goal completion for today: ${goals[goalIndex].text}`);
+          }
+        }
+        
+        // 🚀 PERFORMANCE FIX: Only update streak if this is today and only render affected components
         updateStreak();
         // Only re-render streak and progress tracker, not everything
         renderStreakFlame();
