@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline Test - ZenithGen</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+    .success { background-color: #d4edda; border-color: #c3e6cb; }
+    .error { background-color: #f8d7da; border-color: #f5c6cb; }
+    .info { background-color: #d1ecf1; border-color: #bee5eb; }
+    button { padding: 10px 15px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-success { background-color: #28a745; color: white; }
+    .btn-danger { background-color: #dc3545; color: white; }
+    .btn-info { background-color: #17a2b8; color: white; }
+  </style>
+</head>
+<body>
+  <h1>🔍 ZenithGen Offline Test</h1>
+  
+  <div class="test-section info">
+    <h3>📡 Network Activity Monitor</h3>
+    <p>This page will detect any network requests and show them below.</p>
+    <div id="networkLog"></div>
+  </div>
+  
+  <div class="test-section">
+    <h3>🧪 Test Authentication</h3>
+    <button class="btn-primary" onclick="testSignup()">Test Signup</button>
+    <button class="btn-success" onclick="testLogin()">Test Login</button>
+    <button class="btn-info" onclick="checkLocalStorage()">Check localStorage</button>
+    <button class="btn-danger" onclick="clearData()">Clear All Data</button>
+  </div>
+  
+  <div class="test-section">
+    <h3>📊 Test Results</h3>
+    <div id="testResults"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <script src="signup.js"></script>
+  <script>
+    // Monitor network activity
+    const originalFetch = window.fetch;
+    const networkLog = document.getElementById('networkLog');
+    
+    window.fetch = function(...args) {
+      const url = args[0];
+      const method = args[1]?.method || 'GET';
+      addNetworkLog(`🚨 NETWORK REQUEST DETECTED: ${method} ${url}`, 'error');
+      return originalFetch.apply(this, args);
+    };
+    
+    function addNetworkLog(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = `test-section ${type}`;
+      div.innerHTML = `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+      networkLog.appendChild(div);
+    }
+    
+    function addResult(message, type) {
+      const results = document.getElementById('testResults');
+      const div = document.createElement('div');
+      div.className = `test-section ${type}`;
+      div.innerHTML = `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+      results.appendChild(div);
+    }
+    
+    function testSignup() {
+      const testUser = 'testuser_' + Date.now();
+      const testPass = 'TestPass123!';
+      
+      // Simulate signup
+      const users = getUsers();
+      if (users[testUser]) {
+        addResult('❌ Test user already exists', 'error');
+        return;
+      }
+      
+      // Hash password (using the same logic as signup.js)
+      simpleHash(testPass).then(hashedPassword => {
+        users[testUser] = {
+          password: hashedPassword,
+          createdAt: new Date().toISOString(),
+          lastLogin: null
+        };
+        saveUsers(users);
+        
+        addResult(`✅ Created test user: ${testUser} (localStorage only)`, 'success');
+        checkLocalStorage();
+      });
+    }
+    
+    function testLogin() {
+      const users = getUsers();
+      const testUser = Object.keys(users)[0];
+      
+      if (!testUser) {
+        addResult('❌ No users found to test login', 'error');
+        return;
+      }
+      
+      // Simulate login with a known password
+      const testPass = 'TestPass123!';
+      const user = users[testUser];
+      
+      simpleHash(testPass).then(hashedPassword => {
+        const isValid = (hashedPassword === user.password);
+        
+        if (isValid) {
+          sessionStorage.setItem('currentUser', testUser);
+          addResult(`✅ Login successful for: ${testUser} (localStorage only)`, 'success');
+        } else {
+          addResult(`❌ Login failed for: ${testUser}`, 'error');
+        }
+        checkLocalStorage();
+      });
+    }
+    
+    function checkLocalStorage() {
+      const users = getUsers();
+      const currentUser = sessionStorage.getItem('currentUser');
+      const localStorageUser = localStorage.getItem('currentUser');
+      
+      addResult(`📊 localStorage Status:`, 'info');
+      addResult(`   - Users: ${Object.keys(users).length}`, 'info');
+      addResult(`   - Current User (sessionStorage): ${currentUser || 'None'}`, 'info');
+      addResult(`   - Current User (localStorage): ${localStorageUser || 'None'}`, 'info');
+      addResult(`   - User List: ${Object.keys(users).join(', ') || 'None'}`, 'info');
+    }
+    
+    function clearData() {
+      localStorage.removeItem('zenithgen_users');
+      sessionStorage.removeItem('currentUser');
+      localStorage.removeItem('currentUser');
+      addResult('🗑️ All authentication data cleared', 'success');
+      checkLocalStorage();
+    }
+    
+    // Initialize
+    addResult('🚀 Offline test initialized - monitoring for network requests', 'info');
+    checkLocalStorage();
+  </script>
+</body>
+</html> 

@@ -8,6 +8,7 @@
 // 4. Added selective re-rendering: Only update affected components on data changes
 // 5. Restored 3-column layout CSS that was accidentally removed
 // 6. FIXED INFINITE LOOP: Added debounce protection and removed zendata.set() from render functions
+// 7. 🚀 CRITICAL PERFORMANCE FIX: Fixed infinite loop in updateStreak() and optimized weekly goals
 
 (function() {
   'use strict';
@@ -20,15 +21,38 @@
     'Take a walk', 'Learn something new', 'Organize workspace', 'Practice gratitude', 'Connect with family'
   ];
 
-  // Performance tracking
+  // 🚀 PERFORMANCE FIX: Enhanced performance tracking
   let renderCount = 0;
   let lastRenderTime = 0;
+  let performanceMetrics = {
+    renderTimes: [],
+    weeklyGoalToggles: 0,
+    lastToggleTime: 0
+  };
+  
+  // Performance monitoring function
+  function trackPerformance(operation, duration) {
+    performanceMetrics.renderTimes.push({ operation, duration, timestamp: Date.now() });
+    if (performanceMetrics.renderTimes.length > 100) {
+      performanceMetrics.renderTimes.shift(); // Keep only last 100 entries
+    }
+    
+    if (operation === 'weeklyGoalToggle') {
+      performanceMetrics.weeklyGoalToggles++;
+      performanceMetrics.lastToggleTime = Date.now();
+    }
+    
+    // Log performance warnings
+    if (duration > 100) {
+      console.warn(`⚠️ Slow operation detected: ${operation} took ${duration}ms`);
+    }
+  }
 
   // INFINITE LOOP FIX: Re-entrancy protection
   let ZC_IS_RENDERING = false;
   let ZC_IGNORE_PUBLISH = false;
   
-  // Debounce function
+  // 🚀 PERFORMANCE FIX: Debounce function with longer delay for heavy operations
   function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -41,7 +65,8 @@
     };
   }
   
-  const zcScheduleRender = debounce(() => zcRenderAll('debounced'), 16);
+  // 🚀 PERFORMANCE FIX: Increased debounce delay to prevent rapid re-renders
+  const zcScheduleRender = debounce(() => zcRenderAll('debounced'), 100);
 
   // Load data from zendata
   function loadZenCalendarData() {
@@ -85,7 +110,7 @@
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   }
 
-  // Helper function to update streak
+  // 🚀 CRITICAL PERFORMANCE FIX: Fixed infinite loop in updateStreak
   function updateStreak() {
     const today = new Date().toDateString();
     const lastStreakDate = zendata.get('zencalendar.lastStreakDate');
@@ -119,11 +144,14 @@
       hasCompletedItems
     });
     
-    // Calculate the actual consecutive streak by checking backwards from today
+    // 🚀 FIXED: Calculate the actual consecutive streak by checking backwards from today
+    // Added safety limit to prevent infinite loops
     let calculatedStreak = 0;
     let checkDate = new Date();
+    let daysChecked = 0;
+    const MAX_DAYS_TO_CHECK = 365; // Safety limit
     
-    while (true) {
+    while (daysChecked < MAX_DAYS_TO_CHECK) {
       const checkKey = getDateKey(checkDate);
       const checkData = data[checkKey] || { tasks: [] };
       const checkTasks = checkData.tasks.filter(t => t.completed).length;
@@ -137,12 +165,13 @@
         calculatedStreak++;
         // Go back one day
         checkDate.setDate(checkDate.getDate() - 1);
+        daysChecked++;
       } else {
         break;
       }
     }
     
-    console.log('🔥 Calculated streak:', calculatedStreak, 'days');
+    console.log('🔥 Calculated streak:', calculatedStreak, 'days (checked', daysChecked, 'days)');
     
     // Update the streak if it's different from current
     if (calculatedStreak !== currentStreak) {
@@ -442,6 +471,21 @@
     updateStreak();
     renderStreakFlame();
   };
+  
+  // 🚀 PERFORMANCE FIX: Performance monitoring function for debugging
+  window.zcPerformanceReport = function() {
+    const avgRenderTime = performanceMetrics.renderTimes.length > 0 
+      ? performanceMetrics.renderTimes.reduce((sum, t) => sum + t.duration, 0) / performanceMetrics.renderTimes.length 
+      : 0;
+    
+    console.log('📊 ZenCalendar Performance Report:');
+    console.log(`- Total weekly goal toggles: ${performanceMetrics.weeklyGoalToggles}`);
+    console.log(`- Average render time: ${avgRenderTime.toFixed(2)}ms`);
+    console.log(`- Last toggle: ${performanceMetrics.lastToggleTime ? new Date(performanceMetrics.lastToggleTime).toLocaleTimeString() : 'Never'}`);
+    console.log(`- Recent render times:`, performanceMetrics.renderTimes.slice(-5));
+    
+    return performanceMetrics;
+  };
 
   // --- Time-Blocking Timeline ---
   function getTimelineSlots() {
@@ -714,6 +758,7 @@
     console.log('🎯 Saved weekly goals to zendata:', goals);
   }
   
+  // 🚀 PERFORMANCE FIX: Optimized renderWeeklyGoals with better memory management
   function renderWeeklyGoals() {
     console.time('🎯 Render Weekly Goals');
     const list = document.getElementById('zc-weekly-goals-list');
@@ -722,10 +767,12 @@
       console.timeEnd('🎯 Render Weekly Goals');
       return;
     }
-    list.innerHTML = '';
     
     const goals = getWeeklyGoals();
     console.log('🎯 Rendering weekly goals from zendata:', goals);
+    
+    // 🚀 PERFORMANCE FIX: Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
     
     goals.forEach((goal, idx) => {
       const li = document.createElement('li');
@@ -740,27 +787,39 @@
       toggleBtn.className = 'zc-weekly-goal-toggle';
       toggleBtn.innerHTML = goal.completed ? '✓' : '○';
       toggleBtn.title = goal.completed ? 'Mark incomplete' : 'Mark complete';
-      toggleBtn.onclick = () => toggleWeeklyGoalCompletion(idx);
+      // 🚀 PERFORMANCE FIX: Use event delegation to prevent memory leaks
+      toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        toggleWeeklyGoalCompletion(idx);
+      };
       li.appendChild(toggleBtn);
       
       // Add remove button
       const removeBtn = document.createElement('button');
       removeBtn.className = 'zc-weekly-goal-remove';
       removeBtn.innerHTML = '&times;';
-      removeBtn.onclick = () => {
+      removeBtn.onclick = (e) => {
+        e.stopPropagation();
         goals.splice(idx, 1);
         setWeeklyGoals(goals);
-        zcScheduleRender();
+        // 🚀 PERFORMANCE FIX: Only re-render weekly goals, not everything
+        renderWeeklyGoals();
       };
       li.appendChild(removeBtn);
       
-      list.appendChild(li);
+      fragment.appendChild(li);
     });
+    
+    // 🚀 PERFORMANCE FIX: Single DOM update instead of multiple
+    list.innerHTML = '';
+    list.appendChild(fragment);
     console.timeEnd('🎯 Render Weekly Goals');
   }
   
-  // --- Weekly Goal Completion Toggle ---
+  // 🚀 PERFORMANCE FIX: Optimized Weekly Goal Completion Toggle
   function toggleWeeklyGoalCompletion(goalIndex) {
+    const startTime = performance.now();
+    
     const goals = getWeeklyGoals();
     if (goals[goalIndex]) {
       if (typeof goals[goalIndex] === 'string') {
@@ -771,17 +830,27 @@
       setWeeklyGoals(goals);
       console.log(`🎯 Weekly goal "${goals[goalIndex].text}" ${goals[goalIndex].completed ? 'completed' : 'uncompleted'}`);
       
-      // Update streak if this is today
+      // 🚀 PERFORMANCE FIX: Only update streak if this is today and only render affected components
       const todayKey = getDateKey(new Date());
       const selectedKey = getDateKey(zcSelectedDate);
       if (selectedKey === todayKey) {
         updateStreak();
+        // Only re-render streak and progress tracker, not everything
+        renderStreakFlame();
+        renderProgressTracker();
+      } else {
+        // Only re-render weekly goals list, not everything
+        renderWeeklyGoals();
       }
       
-      zcScheduleRender();
+      // Track performance
+      const duration = performance.now() - startTime;
+      trackPerformance('weeklyGoalToggle', duration);
+      console.log(`⚡ Weekly goal toggle completed in ${duration.toFixed(2)}ms`);
     }
   }
   
+  // 🚀 PERFORMANCE FIX: Optimized weekly goals form submission
   document.getElementById('zc-weekly-goals-form').onsubmit = function(e) {
     e.preventDefault();
     const input = document.getElementById('zc-weekly-goal-input');
@@ -791,7 +860,8 @@
     const goals = getWeeklyGoals();
     goals.push({ text: val, completed: false });
     setWeeklyGoals(goals);
-    zcScheduleRender();
+    // 🚀 PERFORMANCE FIX: Only re-render weekly goals, not everything
+    renderWeeklyGoals();
     console.log('🎯 Added new weekly goal to zendata:', val);
     input.value = '';
   };

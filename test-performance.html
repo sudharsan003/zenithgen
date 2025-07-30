@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenCalendar Performance Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+    .success { background-color: #d4edda; border-color: #c3e6cb; }
+    .error { background-color: #f8d7da; border-color: #f5c6cb; }
+    button { padding: 10px 15px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-primary { background-color: #007bff; color: white; }
+    .btn-success { background-color: #28a745; color: white; }
+    .btn-danger { background-color: #dc3545; color: white; }
+    .performance-metrics { font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🚀 ZenCalendar Performance Test</h1>
+  
+  <div class="test-section">
+    <h3>Performance Test Controls</h3>
+    <button class="btn-primary" onclick="testWeeklyGoalsPerformance()">Test Weekly Goals Performance</button>
+    <button class="btn-success" onclick="runStressTest()">Run Stress Test (50 toggles)</button>
+    <button class="btn-danger" onclick="clearTestData()">Clear Test Data</button>
+  </div>
+  
+  <div class="test-section">
+    <h3>Performance Metrics</h3>
+    <div id="performanceMetrics" class="performance-metrics">
+      Click "Test Weekly Goals Performance" to see metrics
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Test Results</h3>
+    <div id="testResults"></div>
+  </div>
+
+  <script src="zendata.js"></script>
+  <script src="zencalendar.js"></script>
+  <script>
+    function addResult(message, type = 'info') {
+      const results = document.getElementById('testResults');
+      const div = document.createElement('div');
+      div.className = `test-section ${type}`;
+      div.innerHTML = `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+      results.appendChild(div);
+    }
+    
+    function updatePerformanceMetrics() {
+      const metrics = document.getElementById('performanceMetrics');
+      if (typeof window.zcPerformanceReport === 'function') {
+        const report = window.zcPerformanceReport();
+        metrics.innerHTML = `
+          <strong>Performance Report:</strong><br>
+          - Weekly Goal Toggles: ${report.weeklyGoalToggles}<br>
+          - Last Toggle: ${report.lastToggleTime ? new Date(report.lastToggleTime).toLocaleTimeString() : 'Never'}<br>
+          - Recent Operations: ${report.renderTimes.length}<br>
+          - Average Time: ${report.renderTimes.length > 0 ? (report.renderTimes.reduce((sum, t) => sum + t.duration, 0) / report.renderTimes.length).toFixed(2) : 0}ms
+        `;
+      } else {
+        metrics.innerHTML = 'Performance monitoring not available';
+      }
+    }
+    
+    function testWeeklyGoalsPerformance() {
+      console.log('🧪 Testing weekly goals performance...');
+      
+      // Add some test goals if none exist
+      const goals = zendata.get('zencalendar.weeklyGoals') || [];
+      if (goals.length === 0) {
+        const testGoals = [
+          'Test Goal 1',
+          'Test Goal 2', 
+          'Test Goal 3',
+          'Test Goal 4',
+          'Test Goal 5'
+        ];
+        zendata.set('zencalendar.weeklyGoals', testGoals.map(text => ({ text, completed: false })));
+        addResult('✅ Added test weekly goals', 'success');
+      }
+      
+      // Test a single toggle
+      const startTime = performance.now();
+      
+      // Simulate a toggle
+      if (typeof window.toggleWeeklyGoalCompletion === 'function') {
+        window.toggleWeeklyGoalCompletion(0);
+        const duration = performance.now() - startTime;
+        
+        if (duration < 50) {
+          addResult(`✅ Performance test PASSED - Toggle completed in ${duration.toFixed(2)}ms`, 'success');
+        } else if (duration < 100) {
+          addResult(`⚠️ Performance test WARNING - Toggle took ${duration.toFixed(2)}ms`, 'error');
+        } else {
+          addResult(`❌ Performance test FAILED - Toggle took ${duration.toFixed(2)}ms`, 'error');
+        }
+      } else {
+        addResult('❌ toggleWeeklyGoalCompletion function not found', 'error');
+      }
+      
+      updatePerformanceMetrics();
+    }
+    
+    function runStressTest() {
+      console.log('🧪 Running stress test...');
+      addResult('🚀 Starting stress test (50 rapid toggles)...', 'info');
+      
+      let completed = 0;
+      let totalTime = 0;
+      const testCount = 50;
+      
+      function runToggle() {
+        if (completed >= testCount) {
+          const avgTime = totalTime / completed;
+          if (avgTime < 20) {
+            addResult(`✅ Stress test PASSED - Average time: ${avgTime.toFixed(2)}ms`, 'success');
+          } else if (avgTime < 50) {
+            addResult(`⚠️ Stress test WARNING - Average time: ${avgTime.toFixed(2)}ms`, 'error');
+          } else {
+            addResult(`❌ Stress test FAILED - Average time: ${avgTime.toFixed(2)}ms`, 'error');
+          }
+          updatePerformanceMetrics();
+          return;
+        }
+        
+        const startTime = performance.now();
+        if (typeof window.toggleWeeklyGoalCompletion === 'function') {
+          window.toggleWeeklyGoalCompletion(0);
+          const duration = performance.now() - startTime;
+          totalTime += duration;
+          completed++;
+          
+          if (completed % 10 === 0) {
+            addResult(`Progress: ${completed}/${testCount} toggles completed`, 'info');
+          }
+          
+          // Small delay to prevent browser lockup
+          setTimeout(runToggle, 10);
+        }
+      }
+      
+      runToggle();
+    }
+    
+    function clearTestData() {
+      zendata.set('zencalendar.weeklyGoals', []);
+      addResult('🗑️ Test data cleared', 'success');
+      updatePerformanceMetrics();
+    }
+    
+    // Initialize
+    updatePerformanceMetrics();
+  </script>
+</body>
+</html> 
